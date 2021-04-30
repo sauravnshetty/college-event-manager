@@ -1,4 +1,4 @@
-package com.example.eventmanager.ui.dashboard;
+package com.example.eventmanager.ui.clubs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,21 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
 
-public class DashboardFragment extends Fragment {
+public class ClubListFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-    private ClubViewAdapter clubViewAdapter;
+    private ClubListViewModel clubListViewModel;
+    private ClubListViewAdapter clubViewAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        clubListViewModel = new ViewModelProvider(this).get(ClubListViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View root = inflater.inflate(R.layout.fragment_club_list, container, false);
         final RecyclerView clubRecyclerView = root.findViewById(R.id.club_recycler_view);
 
-        dashboardViewModel.getClubs().observe(getViewLifecycleOwner(),clubs -> {
+        clubListViewModel.getClubs().observe(getViewLifecycleOwner(), clubs -> {
             clubRecyclerView.setHasFixedSize(true);
             clubRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            clubViewAdapter = new ClubViewAdapter(getActivity(), clubs);
+            clubViewAdapter = new ClubListViewAdapter(getActivity(), clubs);
             clubRecyclerView.setAdapter(clubViewAdapter);
         });
         return root;

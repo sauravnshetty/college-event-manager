@@ -1,4 +1,4 @@
-package com.example.eventmanager.ui.dashboard;
+package com.example.eventmanager.ui.clubs;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,7 +9,7 @@ import com.example.eventmanager.Club;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardViewModel extends ViewModel {
+public class ClubListViewModel extends ViewModel {
 
     private MutableLiveData<List<Club>> clubs;
     private ArrayList<Club> clubsArrayList = new ArrayList<>();

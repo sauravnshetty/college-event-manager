@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManager">
         <activity
-            android:name=".NavigationActivity"
-            android:label="@string/title_activity_navigation">
+            android:name=".LoginActivity"
+            android:label="Event Manager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".NavigationActivity">
 
         </activity>
     </application>

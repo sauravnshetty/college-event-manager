@@ -1,4 +1,4 @@
-package com.example.eventmanager.ui.dashboard;
+package com.example.eventmanager.ui.clubs;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,25 +16,25 @@ import com.example.eventmanager.R;
 
 import java.util.List;
 
-public class ClubViewAdapter extends RecyclerView.Adapter<ClubViewAdapter.ViewHolder> {
+public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapter.ViewHolder> {
 
     private Context context;
     private List<Club> clubList;
 
-    public ClubViewAdapter(Context context, List<Club> clubList) {
+    public ClubListViewAdapter(Context context, List<Club> clubList) {
         this.context = context;
         this.clubList = clubList;
     }
 
     @NonNull
     @Override
-    public ClubViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.club_row, parent, false);
+    public ClubListViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.club_row_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ClubViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ClubListViewAdapter.ViewHolder holder, int position) {
         Club club = clubList.get(position);
 
         holder.clubName.setText(club.getClubName());

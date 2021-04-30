@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.eventmanager.ui.dashboard.DashboardFragment"
+        android:name="com.example.eventmanager.ui.clubs.ClubListFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_club_list" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.eventmanager.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>
