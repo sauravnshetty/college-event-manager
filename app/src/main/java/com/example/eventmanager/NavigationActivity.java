@@ -2,6 +2,7 @@ package com.example.eventmanager;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.eventmanager.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,6 +22,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class NavigationActivity extends AppCompatActivity {
+
+    private final String TAG = "navActivity: ";
 
     private DatabaseReference mDatabase;
     @Override
@@ -45,26 +48,81 @@ public class NavigationActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if (user != null) {
-            writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), "", 0, false);
+            Log.d(TAG, "Adding user to database " + user.getEmail());
+            writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), "", "", false);
         }
         return false;
     }
 
-    public void writeNewUser(String userId, String name, String email, String usn, int sem, boolean isAdmin) {
-        User user = new User(email, name, usn, sem, isAdmin);
+    public void parseUserFromEmail(User user) {
+        String email = user.getEmail();
+        String usn = email.replace("@nmamit.in", "");
+        user.setUsn(usn);
+
+        switch(usn.substring(5,7)) {
+            case "cs":
+                user.setBranch("Computer Science");
+                break;
+            case "is":
+                user.setBranch("Information Science");
+                break;
+            case "me":
+                user.setBranch("Mechanical");
+                break;
+            case "cv":
+                user.setBranch("Civil");
+                break;
+            case "bt":
+                user.setBranch("Biotechnology");
+                break;
+            case "ec":
+                user.setBranch("Electronics and Communications");
+                break;
+            case "ee":
+                user.setBranch("Electronics and Electricals");
+                break;
+        }
+    }
+
+    public void writeNewUser(String userId, String name, String email, String usn, String branch, boolean isAdmin) {
+        User user = new User(email, name, usn, branch, isAdmin);
+        Log.d(TAG, "Writing user to database " + user.getEmail());
+        parseUserFromEmail(user);
+        Log.d(TAG, "Writing user to database " + user.getUsn());
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
+                    Log.d(TAG, "User added " + user.getEmail());
                     mDatabase.child("users").child(userId).setValue(user);
+                }else {
+                    Log.d(TAG, "User exists!" + user.getEmail());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "cancelled bitch! " + user.getEmail());
+            }
+        });
 
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    Log.d(TAG, "connected");
+                } else {
+                    Log.d(TAG, "not connected");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Listener was cancelled");
             }
         });
     }

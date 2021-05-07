@@ -131,7 +131,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
+        Log.d(TAG, "firebaseAuthWithGoogle: 1" + idToken);
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        Log.d(TAG, "firebaseAuthWithGoogle: 2" + idToken);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

@@ -1,22 +1,24 @@
 package com.example.eventmanager.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class User {
 
     private String email;
     private String name;
     private String usn;
-    private int sem;
+    private String branch;
     private boolean isAdmin;
 
     public User() {
-
     }
 
-    public User(String email, String name, String usn, int sem, boolean isAdmin) {
+    public User(String email, String name, String usn, String branch, boolean isAdmin) {
         this.email = email;
         this.name = name;
         this.usn = usn;
-        this.sem = sem;
+        this.branch = branch;
         this.isAdmin = isAdmin;
     }
 
@@ -44,12 +46,12 @@ public class User {
         this.usn = usn;
     }
 
-    public int getSem() {
-        return sem;
+    public String getBranch() {
+        return branch;
     }
 
-    public void setSem(int sem) {
-        this.sem = sem;
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     public boolean isAdmin() {
