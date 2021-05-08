@@ -4,18 +4,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eventmanager.Club;
+import com.example.eventmanager.model.ClubRowItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClubListViewModel extends ViewModel {
 
-    private MutableLiveData<List<Club>> clubs;
-    private ArrayList<Club> clubsArrayList = new ArrayList<>();
+    private MutableLiveData<List<ClubRowItem>> clubs;
+    private ArrayList<ClubRowItem> clubsArrayList = new ArrayList<>();
 
 
-    public LiveData<List<Club>> getClubs() {
+    public LiveData<List<ClubRowItem>> getClubs() {
         if (clubs == null) {
             clubs = new MutableLiveData<>();
             loadClubs();
@@ -24,8 +24,8 @@ public class ClubListViewModel extends ViewModel {
     }
 
     private void loadClubs() {
-        Club c1 = new Club();
-        Club c2 = new Club();
+        ClubRowItem c1 = new ClubRowItem();
+        ClubRowItem c2 = new ClubRowItem();
         c1.setClubName("Ace");
         c1.setClubDept("CSE");
         c2.setClubName("CSI");

@@ -1,4 +1,4 @@
-package com.example.eventmanager;
+package com.example.eventmanager.model;
 
 public class EventRowItem {
 

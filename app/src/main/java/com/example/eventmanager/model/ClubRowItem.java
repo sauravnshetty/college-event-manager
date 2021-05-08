@@ -1,10 +1,10 @@
-package com.example.eventmanager;
+package com.example.eventmanager.model;
 
-public class Club {
+public class ClubRowItem {
     private String clubName;
     private String clubDept;
 
-    public Club() {
+    public ClubRowItem() {
     }
 
     public String getClubName() {

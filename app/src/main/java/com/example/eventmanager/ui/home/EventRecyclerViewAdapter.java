@@ -10,9 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventmanager.EventRowItem;
+import com.example.eventmanager.model.EventRowItem;
 import com.example.eventmanager.R;
-import com.example.eventmanager.ui.clubs.ClubListViewAdapter;
 
 import java.util.List;
 

@@ -3,13 +3,13 @@ package com.example.eventmanager.ui.profile;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,24 +18,25 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.eventmanager.ClubFormActivity;
 import com.example.eventmanager.LoginActivity;
 import com.example.eventmanager.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.eventmanager.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.concurrent.Executor;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileFragment extends Fragment {
 
-    ImageView profile_img;
-    TextView profile_dept,profile_email,profile_name;
-    GoogleSignInClient mGoogleSignInClient;
-    Button signOut;
+    private static final String TAG = "Profile View: ";
+
+    ImageView profileImg;
+    TextView profileBranch, profileEmail, profileName;
+    Button signOut, createClubBtn;
 
     private ProfileViewModel profileViewModel;
 
@@ -44,11 +45,12 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         //final TextView textView = root.findViewById(R.id.textView);
 
-        profile_img = root.findViewById(R.id.profile_image);
-        profile_dept = root.findViewById(R.id.profile_dept);
-        profile_email = root.findViewById(R.id.profile_email);
-        profile_name = root.findViewById(R.id.profile_name);
+        profileImg = root.findViewById(R.id.profile_image);
+        profileBranch = root.findViewById(R.id.profileBranch);
+        profileEmail = root.findViewById(R.id.profileEmail);
+        profileName = root.findViewById(R.id.profile_name);
         signOut = root.findViewById(R.id.profile_signout);
+        createClubBtn = root.findViewById(R.id.createClubBtn);
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,12 +58,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        createClubBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
+            public void onClick(View view) {
+                Intent createClubIntent = new Intent(getActivity(), ClubFormActivity.class);
+                startActivity(createClubIntent);
             }
         });
+
         return root;
     }
 
@@ -69,32 +73,39 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = acct.getUid();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                updateData(snapshot.getValue(User.class));
+            }
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-            Uri personPhoto = acct.getPhotoUrl();
-
-            profile_name.setText(personName);
-            profile_email.setText(personEmail);
-            Glide.with(this).load(String.valueOf(personPhoto)).into(profile_img);
-        }
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPost:onCancelled", error.toException());
+            }
+        });
     }
+
+    private void updateData(User acct) {
+        if(acct != null) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String personName = acct.getName();
+            String personEmail = acct.getEmail();
+            String personBranch = acct.getBranch();
+            Uri personPhoto = user.getPhotoUrl();
+
+            profileName.setText(personName);
+            profileEmail.setText(personEmail);
+            profileBranch.setText(personBranch);
+            Glide.with(this).load(String.valueOf(personPhoto)).into(profileImg);
+        } 
+    }
+
     private void signOut() {
-        /*
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                    }
-                });
-         */
+
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getActivity(),
                 LoginActivity.class);

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventmanager.Club;
+import com.example.eventmanager.model.ClubRowItem;
 import com.example.eventmanager.R;
 
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.List;
 public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapter.ViewHolder> {
 
     private Context context;
-    private List<Club> clubList;
+    private List<ClubRowItem> clubRowItemList;
 
-    public ClubListViewAdapter(Context context, List<Club> clubList) {
+    public ClubListViewAdapter(Context context, List<ClubRowItem> clubRowItemList) {
         this.context = context;
-        this.clubList = clubList;
+        this.clubRowItemList = clubRowItemList;
     }
 
     @NonNull
@@ -35,15 +35,15 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ClubListViewAdapter.ViewHolder holder, int position) {
-        Club club = clubList.get(position);
+        ClubRowItem clubRowItem = clubRowItemList.get(position);
 
-        holder.clubName.setText(club.getClubName());
-        holder.clubDept.setText(club.getClubDept());
+        holder.clubName.setText(clubRowItem.getClubName());
+        holder.clubDept.setText(clubRowItem.getClubDept());
     }
 
     @Override
     public int getItemCount() {
-        return clubList.size();
+        return clubRowItemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

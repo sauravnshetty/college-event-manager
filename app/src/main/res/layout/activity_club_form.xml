@@ -23,7 +23,7 @@
             android:background="@drawable/circle_border">
 
             <ImageView
-                android:id="@+id/profile_image"
+                android:id="@+id/clubImage"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="9dp"
@@ -40,27 +40,27 @@
 
         </RelativeLayout>
 
+<!--        <TextView-->
+<!--            android:id="@+id/profile_name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/imgUser"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginTop="15sp"-->
+<!--            android:fontFamily="sans-serif-light"-->
+<!--            android:text="Joey Tribbiani"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="25sp" />-->
+
+
         <TextView
-            android:id="@+id/profile_name"
+            android:id="@+id/changeImageBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgUser"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15sp"
-            android:fontFamily="sans-serif-light"
-            android:text="Joey Tribbiani"
-            android:textColor="@color/white"
-            android:textSize="25sp" />
-
-
-        <TextView
-            android:id="@+id/profile_dept"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_name"
-            android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
-            android:text="Computer Science"
+            android:text="Change club logo"
             android:textAllCaps="true"
             android:textColor="@color/address"
             android:textSize="14sp" />
@@ -73,23 +73,6 @@
         android:layout_height="509dp"
         android:layout_below="@+id/rellay1"
         android:layout_above="@+id/profile_signout">
-
-        <Button
-            android:id="@+id/createClubBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="126dp"
-            android:layout_marginLeft="126dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="126dp"
-            android:layout_marginRight="126dp"
-            android:text="Create a club"
-            android:textColor="#FFFEFE"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,17 +91,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="Club Name"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/profileEmail"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/clubNameEt"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="joey@sharenofood.com"
-                    android:textColor="#FFFEFE"
+                    android:text=""
+                    android:textColor="#000000"
                     android:textSize="18sp" />
 
                 <View
@@ -142,13 +125,13 @@
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/profileBranch"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/clubBranchEt"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="+1-202-555-0157"
-                    android:textColor="#FFFEFE"
+                    android:text=""
+                    android:textColor="#000000"
                     android:textSize="18sp" />
 
                 <View
@@ -159,34 +142,36 @@
 
             </LinearLayout>
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Twitter"-->
-<!--                    android:textColor="@color/headings"-->
-<!--                    android:textSize="13sp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="club_intro"
+                    android:textColor="@color/headings"
+                    android:textSize="13sp" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="sans-serif-light"-->
-<!--                    android:text="@string/twitterUsername"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="18sp" />-->
+                <EditText
+                    android:id="@+id/clubIntroEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:maxLines="4"/>
 
-<!--                <View-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="1dp"-->
-<!--                    android:layout_marginTop="15dp"-->
-<!--                    android:background="@color/grey" />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/grey" />
 
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
 <!--            <LinearLayout-->
 <!--                android:layout_width="match_parent"-->
@@ -223,7 +208,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/profile_signout"
+        android:id="@+id/submitBtn"
         android:layout_width="159dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -239,7 +224,7 @@
         android:background="@drawable/mybutton"
         android:padding="10dp"
         android:rotationY="2"
-        android:text="Sign Out"
+        android:text="Register Club"
         android:textColor="#ffffff" />
 
 </RelativeLayout>

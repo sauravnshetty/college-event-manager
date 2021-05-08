@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eventmanager.EventRowItem;
+import com.example.eventmanager.model.EventRowItem;
 
 import java.util.ArrayList;
 import java.util.List;
