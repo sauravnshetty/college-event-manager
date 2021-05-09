@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <ImageView
+                android:id="@+id/clubImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_user" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/clubName"
+            android:layout_width="match_parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="30dp"
+            android:textAlignment="center"
+            android:text="ACE"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:gravity="center_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Branch"
+                        android:textColor="@color/headings"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/profileEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Computer Science"
+                        android:textColor="#121212"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/grey" />
+
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textColor="@color/headings"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="This is a ACE club created under computer science branch"
+                    android:textColor="#121212"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/profile_signout"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="126dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="126dp"
+            android:layout_marginEnd="126dp"
+            android:layout_marginRight="126dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/mybutton"
+            android:padding="10dp"
+            android:rotationY="2"
+            android:text="Create Event"
+            android:textColor="#ffffff" />
+
+
+    </LinearLayout>
+</ScrollView>
