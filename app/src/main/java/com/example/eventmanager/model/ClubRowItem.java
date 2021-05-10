@@ -7,6 +7,11 @@ public class ClubRowItem {
     public ClubRowItem() {
     }
 
+    public ClubRowItem(String clubName, String clubDept) {
+        this.clubName = clubName;
+        this.clubDept = clubDept;
+    }
+
     public String getClubName() {
         return clubName;
     }

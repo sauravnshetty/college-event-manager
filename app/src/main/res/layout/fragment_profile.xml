@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="joey@sharenofood.com"
-                    android:textColor="#121212"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
                 <View
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="+1-202-555-0157"
-                    android:textColor="#121212"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
                 <View

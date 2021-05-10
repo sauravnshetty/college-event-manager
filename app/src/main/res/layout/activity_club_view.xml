@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <com.google.android.material.card.MaterialCardView
@@ -28,9 +28,25 @@
             android:textAlignment="center"
             android:text="ACE"
             android:fontFamily="sans-serif-light"
-            android:textColor="@color/black"
+            android:textColor="?android:textColorPrimary"
             android:textSize="25sp"
             android:gravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/createEventBtn"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="126dp"
+            android:layout_marginLeft="126dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="126dp"
+            android:layout_marginRight="126dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/mybutton"
+            android:padding="10dp"
+            android:rotationY="2"
+            android:text="Create Event"
+            android:textColor="#ffffff" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,12 +70,12 @@
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/profileEmail"
+                        android:id="@+id/clubBranch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:text="Computer Science"
-                        android:textColor="#121212"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <View
@@ -82,11 +98,12 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/clubIntro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="This is a ACE club created under computer science branch"
-                    android:textColor="#121212"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
                 <View
@@ -97,22 +114,6 @@
 
             </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/profile_signout"
-            android:layout_width="159dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="126dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="126dp"
-            android:layout_marginEnd="126dp"
-            android:layout_marginRight="126dp"
-            android:layout_marginBottom="25dp"
-            android:background="@drawable/mybutton"
-            android:padding="10dp"
-            android:rotationY="2"
-            android:text="Create Event"
-            android:textColor="#ffffff" />
-
 
     </LinearLayout>
 </ScrollView>
