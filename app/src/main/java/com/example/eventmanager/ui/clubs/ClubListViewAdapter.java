@@ -1,7 +1,7 @@
 package com.example.eventmanager.ui.clubs;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventmanager.ClubViewActivity;
 import com.example.eventmanager.model.ClubRowItem;
 import com.example.eventmanager.R;
 
@@ -62,7 +63,8 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
 
         @Override
         public void onClick(View v) {
-            Log.d("ClickFromViewHolder", "Clicked");
+            Intent clubViewIntent = new Intent(context, ClubViewActivity.class);
+            context.startActivity(clubViewIntent);
         }
     }
 }

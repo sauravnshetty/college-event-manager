@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.eventmanager" >
+    package="com.example.eventmanager">
 
     <application
         android:allowBackup="true"
@@ -8,12 +8,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.EventManager" >
-        <activity android:name=".ClubFormActivity" >
-        </activity>
+        android:theme="@style/Theme.EventManager">
+        <activity android:name=".ClubViewActivity"></activity>
+        <activity android:name=".ClubFormActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="Event Manager" >
+            android:label="Event Manager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,8 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login" />
-        <activity android:name=".NavigationActivity" >
-        </activity>
+        <activity android:name=".NavigationActivity" />
     </application>
 
 </manifest>

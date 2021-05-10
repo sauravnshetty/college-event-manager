@@ -83,10 +83,10 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="126dp"
+            android:layout_marginStart="124dp"
             android:layout_marginLeft="126dp"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="126dp"
+            android:layout_marginEnd="124dp"
             android:layout_marginRight="126dp"
             android:text="Create a club"
             android:textColor="#FFFEFE"/>
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="joey@sharenofood.com"
-                    android:textColor="#FFFEFE"
+                    android:textColor="#121212"
                     android:textSize="18sp" />
 
                 <View
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="+1-202-555-0157"
-                    android:textColor="#FFFEFE"
+                    android:textColor="#121212"
                     android:textSize="18sp" />
 
                 <View
@@ -240,6 +240,6 @@
         android:padding="10dp"
         android:rotationY="2"
         android:text="Sign Out"
-        android:textColor="#ffffff" />
+        android:textColor="#121212" />
 
 </RelativeLayout>

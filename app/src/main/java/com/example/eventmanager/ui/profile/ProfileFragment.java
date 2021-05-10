@@ -79,6 +79,10 @@ public class ProfileFragment extends Fragment {
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //Your fragment is detached before response coming from firebase, So try to check getActivity() null before using that
+                if (getActivity() == null) {
+                    return;
+                }
                 updateData(snapshot.getValue(User.class));
             }
 
