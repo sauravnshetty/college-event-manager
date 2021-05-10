@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment {
             profileEmail.setText(personEmail);
             profileBranch.setText(personBranch);
             Glide.with(this).load(String.valueOf(personPhoto)).into(profileImg);
-        } 
+        }
     }
 
     private void signOut() {
