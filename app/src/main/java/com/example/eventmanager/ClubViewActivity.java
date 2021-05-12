@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,12 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ClubViewActivity extends AppCompatActivity {
+public class ClubViewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = "ClubViewActivity";
 
     private TextView clubNameTv, clubBranchTv, clubIntroTv;
     private ImageView clubImage;
+    private Button createEventBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class ClubViewActivity extends AppCompatActivity {
         clubBranchTv = findViewById(R.id.clubBranch);
         clubIntroTv = findViewById(R.id.clubIntro);
         clubImage = findViewById(R.id.clubImage);
+        createEventBtn = findViewById(R.id.createEventBtn);
+        createEventBtn.setOnClickListener(this);
     }
 
     @Override
@@ -76,5 +82,12 @@ public class ClubViewActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to get club image");
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
+        i.putExtra("clubName",clubNameTv.getText().toString());
+        startActivity(i);
     }
 }

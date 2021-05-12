@@ -1,6 +1,7 @@
 package com.example.eventmanager.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventmanager.ClubViewActivity;
+import com.example.eventmanager.EventViewActivity;
 import com.example.eventmanager.model.EventRowItem;
 import com.example.eventmanager.R;
 
@@ -46,7 +49,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         return eventRowItemList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    //removed static keyword for a class
+    public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView eventName, clubName, date;
         public ViewHolder(@NonNull View itemView) {
@@ -56,13 +60,14 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             clubName = itemView.findViewById(R.id.clubNametv);
             date = itemView.findViewById(R.id.datetv);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("ClickFromViewHolder", "Clicked");
-                }
-            });
+            itemView.setOnClickListener(this);
+            }
 
+        @Override
+        public void onClick(View v) {
+            Intent eventViewIntent = new Intent(context, EventViewActivity.class);
+            context.startActivity(eventViewIntent);
         }
+
     }
 }
