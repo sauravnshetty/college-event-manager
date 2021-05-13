@@ -95,7 +95,7 @@ public class EventFormActivity extends AppCompatActivity {
 
         dateSetListener = (view, year1, month1, dayOfMonth) -> {
             month1 = month1 +1;
-            String date = day+"-"+ month1 +"-"+ year1;
+            String date = dayOfMonth+"-"+ month1 +"-"+ year1;
             eventDateTv.setText(date);
         };
 

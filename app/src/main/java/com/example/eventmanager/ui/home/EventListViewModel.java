@@ -27,7 +27,7 @@ import java.util.List;
 
 public class EventListViewModel extends ViewModel {
 
-    private MutableLiveData<List<Event>> events;
+    private MutableLiveData<List<Event>> events;//recentEvents;
     private ArrayList<Event> eventsArrayList = new ArrayList<>();
 
     public LiveData<List<Event>> getEvents() {

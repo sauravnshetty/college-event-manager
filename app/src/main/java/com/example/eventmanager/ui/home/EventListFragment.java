@@ -16,13 +16,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.eventmanager.R;
+import com.example.eventmanager.model.Event;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EventListFragment extends Fragment {
 
     public static final String ARG_POS = "position";
 
+    private List<Event> upcomingEvents;
+    private List<Event> recentEvents;
+
     private EventListViewModel mViewModel;
     private EventRecyclerViewAdapter eventViewAdapter;
+
+    public EventListFragment() {
+        this.upcomingEvents = new ArrayList<>();
+        this.recentEvents = new ArrayList<>();
+    }
 
     public static EventListFragment newInstance() {
         return new EventListFragment();
@@ -35,11 +50,45 @@ public class EventListFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         final RecyclerView eventRecyclerView = root.findViewById(R.id.eventRecyclerView);
+        Bundle args = getArguments();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+        Date presentDate = new Date();
 
         mViewModel.getEvents().observe(getViewLifecycleOwner(), eventRowItems -> {
             eventRecyclerView.setHasFixedSize(true);
             eventRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            eventViewAdapter = new EventRecyclerViewAdapter(getActivity(), eventRowItems);
+            
+            upcomingEvents.clear();
+            recentEvents.clear();
+            for(Event event : eventRowItems) {
+                String dateTime = event.getEventDate() + " " + event.getEventTime();
+                try {
+                    Date eDate = sdf.parse(dateTime);
+
+                    if(eDate.after(presentDate))
+                        upcomingEvents.add(event);
+                    else
+                        recentEvents.add(event);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            switch (args.getInt(ARG_POS)) {
+                case 0:
+                    //upcoming events
+                    eventViewAdapter = new EventRecyclerViewAdapter(getActivity(), upcomingEvents);
+                    break;
+                case 1:
+                    //recent events;
+                    eventViewAdapter = new EventRecyclerViewAdapter(getActivity(), recentEvents);
+                    break;
+                default:
+                    eventViewAdapter = new EventRecyclerViewAdapter(getActivity(), eventRowItems);
+            }
+
             eventRecyclerView.setAdapter(eventViewAdapter);
         });
 

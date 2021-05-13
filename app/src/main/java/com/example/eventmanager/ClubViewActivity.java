@@ -57,7 +57,7 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
                 dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
             }
         });
-        
+
         createEventBtn = findViewById(R.id.createEventBtn);
         createEventBtn.setOnClickListener(this);
     }
