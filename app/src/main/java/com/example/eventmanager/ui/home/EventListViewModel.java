@@ -1,20 +1,36 @@
 package com.example.eventmanager.ui.home;
 
+import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bumptech.glide.Glide;
+import com.example.eventmanager.model.Club;
+import com.example.eventmanager.model.Event;
 import com.example.eventmanager.model.EventRowItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventListViewModel extends ViewModel {
 
-    private MutableLiveData<List<EventRowItem>> events;
-    private ArrayList<EventRowItem> eventList = new ArrayList<>();
+    private MutableLiveData<List<Event>> events;
+    private ArrayList<Event> eventsArrayList = new ArrayList<>();
 
-    public LiveData<List<EventRowItem>> getEvents() {
+    public LiveData<List<Event>> getEvents() {
         if(events == null) {
             events = new MutableLiveData<>();
             loadEvents();
@@ -23,19 +39,50 @@ public class EventListViewModel extends ViewModel {
     }
 
     private void loadEvents() {
-        eventList.add(new EventRowItem("Art Attack", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary", "ACE", "3/5/21"));
-        eventList.add(new EventRowItem("Art Attack2", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary2", "ACE", "3/5/21"));
-        eventList.add(new EventRowItem("Art Attack3", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary3", "ACE", "3/5/21"));
-        eventList.add(new EventRowItem("Art Attack4", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary4", "ACE", "3/5/21"));
-        eventList.add(new EventRowItem("Art Attack5", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary5", "ACE", "3/5/21"));
-        eventList.add(new EventRowItem("Art Attack6", "CSI", "12/4/21"));
-        eventList.add(new EventRowItem("Pictionary6", "ACE", "3/5/21"));
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events");
 
-        events.setValue(eventList);
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Event event = dataSnapshot.getValue(Event.class);
+                event.setEventId(dataSnapshot.getKey());
+                eventsArrayList.add(event);
+                events.setValue(eventsArrayList);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                Event event = dataSnapshot.getValue(Event.class);
+                event.setEventId(dataSnapshot.getKey());
+
+                for(int i = 0; i < eventsArrayList.size(); i++) {
+                    if(eventsArrayList.get(i).getEventId().equals(event.getEventId())) {
+                        eventsArrayList.set(i, event);
+                        break;
+                    }
+                }
+                events.setValue(eventsArrayList);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Event event = dataSnapshot.getValue(Event.class);
+                event.setEventId(dataSnapshot.getKey());
+
+                for(int i = 0; i < eventsArrayList.size(); i++) {
+                    if(eventsArrayList.get(i).getEventId().equals(event.getEventId())) {
+                        eventsArrayList.remove(i);
+                        break;
+                    }
+                }
+                events.setValue(eventsArrayList);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 }
