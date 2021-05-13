@@ -2,6 +2,7 @@ package com.example.eventmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
+import com.example.eventmanager.eventviewui.RegisteredMembersDialogFragment;
 import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.Event;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,14 +33,20 @@ import com.google.firebase.storage.StorageReference;
 public class EventViewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = "EventViewActivity";
-    ImageView eventImage;
-    TextView eventNameTv,clubNameTv,eventDateTv,eventTimeTv,eventVenueTv,eventDescriptionTv,eventOrganizerTv;
-    Button registerBtn;
+    private String eventId;
+    private ImageView eventImage;
+    private TextView eventNameTv,clubNameTv,eventDateTv,eventTimeTv,eventVenueTv,eventDescriptionTv,eventOrganizerTv;
+    private Button registerBtn,registerListBtn;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         eventImage = findViewById(R.id.eventImage);
         eventNameTv = findViewById(R.id.eventName);
@@ -47,12 +58,20 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         eventOrganizerTv = findViewById(R.id.eventOrganizer);
         registerBtn = findViewById(R.id.eventRegisterBtn);
         registerBtn.setOnClickListener(this);
+        registerListBtn = findViewById(R.id.registerListBtn);
+        registerListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = new RegisteredMembersDialogFragment(eventId);
+                dialog.show(getSupportFragmentManager(), "RegisteredMembersDialogFragment");
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        String eventId = getIntent().getStringExtra("selectedEventId");
+        eventId = getIntent().getStringExtra("selectedEventId");
 
         DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("events");
         eventsRef.child(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,7 +111,24 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getApplicationContext(),"register button clicked",Toast.LENGTH_SHORT).show();
+        DatabaseReference registerRef = FirebaseDatabase.getInstance().getReference().child("registeredmembers").child(eventId);
+        registerRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()) {
+                    registerRef.child(currentUser.getUid()).setValue(currentUser.getDisplayName());
+                    Toast.makeText(getApplicationContext(),"You have successfully registered",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"You have already registered",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "onCancelled:failed to add registered members");
+            }
+        });
+
 
     }
 }

@@ -224,5 +224,21 @@
             android:rotationY="2"
             android:text="REGISTER"
             android:textColor="?android:textColorPrimary" />
+
+        <Button
+            android:id="@+id/registerListBtn"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="126dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="126dp"
+            android:layout_marginEnd="126dp"
+            android:layout_marginRight="126dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/mybutton"
+            android:padding="10dp"
+            android:rotationY="2"
+            android:text="View Registered Members"
+            android:textColor="?android:textColorPrimary" />
     </LinearLayout>
 </ScrollView>

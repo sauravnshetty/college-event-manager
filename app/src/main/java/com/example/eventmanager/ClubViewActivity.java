@@ -50,12 +50,9 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
 
         addMembersBtn = findViewById(R.id.addMembersBtn);
 
-        addMembersBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment dialog = new AddMembersDialogFragment(clubId);
-                dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
-            }
+        addMembersBtn.setOnClickListener(view -> {
+            DialogFragment dialog = new AddMembersDialogFragment(clubId);
+            dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
         });
 
         createEventBtn = findViewById(R.id.createEventBtn);
