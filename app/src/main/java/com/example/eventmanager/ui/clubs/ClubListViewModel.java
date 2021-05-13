@@ -1,16 +1,25 @@
 package com.example.eventmanager.ui.clubs;
 
+import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bumptech.glide.Glide;
 import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.ClubRowItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +48,7 @@ public class ClubListViewModel extends ViewModel {
                 Club club = dataSnapshot.getValue(Club.class);
                 club.setClubId(dataSnapshot.getKey());
                 clubsArrayList.add(club);
+                //since this function gets called later we need to update the livedata here
                 clubs.setValue(clubsArrayList);
             }
 
@@ -77,4 +87,5 @@ public class ClubListViewModel extends ViewModel {
             public void onCancelled(DatabaseError databaseError) {}
         });
     }
+
 }

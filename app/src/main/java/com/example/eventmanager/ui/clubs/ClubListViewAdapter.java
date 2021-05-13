@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,19 +25,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
-public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapter.ViewHolder> {
+public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "ClubListViewAdapter";
     private Context context;
     private List<Club> clubList;
+    private List<Club> clubListFull;
 
     public ClubListViewAdapter(Context context, List<Club> clubList) {
         this.context = context;
         this.clubList = clubList;
+        this.clubListFull = new ArrayList<>(clubList);
     }
 
     @NonNull
@@ -100,4 +105,41 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
             context.startActivity(clubViewIntent);
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return clubListFilter;
+    }
+
+    private Filter clubListFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Club> filteredList = new ArrayList<>();
+
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(clubListFull);
+            }
+            else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for(Club item : clubListFull) {
+                    if(item.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            clubList.clear();
+            clubList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 }

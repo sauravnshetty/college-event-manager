@@ -2,16 +2,23 @@ package com.example.eventmanager.ui.clubs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
+
+import static com.example.eventmanager.R.menu.top_menu;
 
 public class ClubListFragment extends Fragment {
 
@@ -23,6 +30,8 @@ public class ClubListFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_club_list, container, false);
         final RecyclerView clubRecyclerView = root.findViewById(R.id.club_recycler_view);
+
+        setHasOptionsMenu(true);
 
         clubListViewModel.getClubs().observe(getViewLifecycleOwner(), clubs -> {
             clubRecyclerView.setHasFixedSize(true);
@@ -41,5 +50,29 @@ public class ClubListFragment extends Fragment {
             }
         });
         return root;*/
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(top_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                clubViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

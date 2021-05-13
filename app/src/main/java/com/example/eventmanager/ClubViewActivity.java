@@ -1,16 +1,20 @@
-package com.example.eventmanager;
+ package com.example.eventmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.model.Club;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +32,9 @@ public class ClubViewActivity extends AppCompatActivity {
 
     private TextView clubNameTv, clubBranchTv, clubIntroTv;
     private ImageView clubImage;
+    private Button addMembersBtn;
+
+    private String clubId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +45,22 @@ public class ClubViewActivity extends AppCompatActivity {
         clubBranchTv = findViewById(R.id.clubBranch);
         clubIntroTv = findViewById(R.id.clubIntro);
         clubImage = findViewById(R.id.clubImage);
+        addMembersBtn = findViewById(R.id.addMembersBtn);
+
+        addMembersBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialog = new AddMembersDialogFragment(clubId);
+                dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        String clubId = getIntent().getStringExtra("selectedClubId");
+        clubId = getIntent().getStringExtra("selectedClubId");
 
         DatabaseReference clubsRef = FirebaseDatabase.getInstance().getReference().child("clubs");
         clubsRef.child(clubId).addListenerForSingleValueEvent(new ValueEventListener() {

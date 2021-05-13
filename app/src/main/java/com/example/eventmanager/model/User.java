@@ -1,5 +1,6 @@
 package com.example.eventmanager.model;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -11,6 +12,8 @@ public class User {
     private String branch;
     private boolean isAdmin;
 
+    private String uid;
+
     public User() {
     }
 
@@ -20,6 +23,15 @@ public class User {
         this.usn = usn;
         this.branch = branch;
         this.isAdmin = isAdmin;
+    }
+
+    @Exclude
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
