@@ -58,26 +58,18 @@ public class ClubFormActivity extends AppCompatActivity {
 
         clubImage = findViewById(R.id.clubImage);
 
-        changeDpTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-            }
-        });
+        changeDpTv.setOnClickListener(view -> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("clubs");
-                String clubId = mDatabaseReference.push().getKey();
-                uploadFile(clubId);
-                Club newClub = new Club(clubNameEt.getText().toString(), clubBranchEt.getText().toString(),
-                        clubIntroEt.getText().toString());
+        submitBtn.setOnClickListener(view -> {
+            DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("clubs");
+            String clubId = mDatabaseReference.push().getKey();
+            uploadFile(clubId);
+            Club newClub = new Club(clubNameEt.getText().toString(), clubBranchEt.getText().toString(),
+                    clubIntroEt.getText().toString());
 
-                mDatabaseReference.child(clubId).setValue(newClub);
-                Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+            mDatabaseReference.child(clubId).setValue(newClub);
+            Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 

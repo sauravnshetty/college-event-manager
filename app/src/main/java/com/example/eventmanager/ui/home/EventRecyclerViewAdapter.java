@@ -1,28 +1,40 @@
 package com.example.eventmanager.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.eventmanager.ClubViewActivity;
+import com.example.eventmanager.EventViewActivity;
+import com.example.eventmanager.model.Event;
 import com.example.eventmanager.model.EventRowItem;
 import com.example.eventmanager.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "EventRViewAdapter";
     private Context context;
-    private List<EventRowItem> eventRowItemList;
+    private List<Event> eventsList;
 
-    public EventRecyclerViewAdapter(Context context, List<EventRowItem> eventRowItems) {
+    public EventRecyclerViewAdapter(Context context, List<Event> eventsList) {
         this.context = context;
-        this.eventRowItemList = eventRowItems;
+        this.eventsList = eventsList;
     }
 
     @NonNull
@@ -35,34 +47,59 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        EventRowItem eventRowItem = eventRowItemList.get(position);
-        holder.eventName.setText(eventRowItem.getEventName());
-        holder.clubName.setText(eventRowItem.getClubName());
-        holder.date.setText(eventRowItem.getDate());
+        Event event = eventsList.get(position);
+        holder.eventName.setText(event.getEventName());
+        holder.date.setText(event.getEventDate());
+
+        StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
+        clubImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(String.valueOf(uri)).into(holder.eventImage);
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Failed to get event image");
+                    }
+                });
     }
 
     @Override
     public int getItemCount() {
-        return eventRowItemList.size();
+        return eventsList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    //removed static keyword for a class
+    public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView eventName, clubName, date;
+        TextView eventName,date;
+        ImageView eventImage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            eventName = itemView.findViewById(R.id.eventNametv);
-            clubName = itemView.findViewById(R.id.clubNametv);
-            date = itemView.findViewById(R.id.datetv);
+            eventName = itemView.findViewById(R.id.eventNameTv);
+            date = itemView.findViewById(R.id.eventDateTv);
+            eventImage = itemView.findViewById(R.id.event_image);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("ClickFromViewHolder", "Clicked");
+            itemView.setOnClickListener(this);
+            }
+
+        @Override
+        public void onClick(View v) {
+            Intent eventViewIntent = new Intent(context, EventViewActivity.class);
+            String eventName = this.eventName.getText().toString();
+            String eventDate = this.date.getText().toString();
+            String selectedEventId = null;
+            for(int i = 0; i < eventsList.size(); i++) {
+                if(eventsList.get(i).getEventName().equals(eventName) &&  eventsList.get(i).getEventDate().equals(eventDate)) {
+                    selectedEventId = eventsList.get(i).getEventId();
                 }
-            });
-
+            }
+            eventViewIntent.putExtra("selectedEventId", selectedEventId);
+            context.startActivity(eventViewIntent);
         }
+
     }
 }
