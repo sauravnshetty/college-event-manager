@@ -2,6 +2,7 @@ package com.example.eventmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.model.Club;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,11 +61,23 @@ public class ClubFormActivity extends AppCompatActivity {
 
         clubImage = findViewById(R.id.clubImage);
 
+        Club club = (Club)getIntent().getSerializableExtra("club");
+        if(club != null)
+            showClubDetailsInUI(club);
+
         changeDpTv.setOnClickListener(view -> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
 
         submitBtn.setOnClickListener(view -> {
             DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("clubs");
-            String clubId = mDatabaseReference.push().getKey();
+
+            String clubId;
+            if(club == null) {
+                //Add a new club
+                clubId = mDatabaseReference.push().getKey();
+            }else {
+                //Edit information for an existing club
+                clubId = club.getClubId();
+            }
             uploadFile(clubId);
             Club newClub = new Club(clubNameEt.getText().toString(), clubBranchEt.getText().toString(),
                     clubIntroEt.getText().toString());
@@ -92,6 +107,27 @@ public class ClubFormActivity extends AppCompatActivity {
             Log.d(TAG, "Image: " + imageUri.toString());
         }
     }
+
+    private void showClubDetailsInUI(Club club) {
+        clubNameEt.setText(club.getName());
+        clubBranchEt.setText(club.getBranch());
+        clubIntroEt.setText(club.getIntroText());
+        submitBtn.setText("Save");
+        StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("clubImages");
+        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(clubImage);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Failed to get club image");
+            }
+        });
+    }
+
 
     private void uploadFile(String fileName) {
         final ProgressDialog progressDialog = new ProgressDialog(getBaseContext());

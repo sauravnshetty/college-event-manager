@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.model.Club;
+import com.example.eventmanager.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,9 +42,10 @@ public class ClubViewActivity extends AppCompatActivity {
     private TextView clubNameTv, clubBranchTv, clubIntroTv;
     private ImageView clubImage;
     private Button addMembersBtn;
+    private Button createEventBtn;
 
     private String clubId;
-    private Button createEventBtn;
+    private Club club;
 
 
     @Override
@@ -103,7 +108,8 @@ public class ClubViewActivity extends AppCompatActivity {
         clubsRef.child(clubId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Club club = snapshot.getValue(Club.class);
+                club = snapshot.getValue(Club.class);
+                club.setClubId(snapshot.getKey());
                 clubNameTv.setText(club.getName());
                 clubBranchTv.setText(club.getBranch());
                 clubIntroTv.setText(club.getIntroText());
@@ -129,5 +135,51 @@ public class ClubViewActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to get club image");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.new_top_menu, menu);
+        menu.getItem(0).setEnabled(false);
+        menu.getItem(0).setVisible(false);
+        menu.getItem(1).setEnabled(false);
+        menu.getItem(1).setVisible(false);
+        mDatabase.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if(user.isAdmin()) {
+                    menu.getItem(0).setEnabled(true);
+                    menu.getItem(0).setVisible(true);
+                    menu.getItem(1).setEnabled(true);
+                    menu.getItem(1).setVisible(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Intent clubFormIntent = new Intent(this, ClubFormActivity.class);
+                clubFormIntent.putExtra("club", club);
+                startActivity(clubFormIntent);
+                return true;
+            case R.id.add_members:
+                DialogFragment dialog = new AddMembersDialogFragment(clubId);
+                dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -160,7 +160,5 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
                 Log.d(TAG, "onCancelled:failed to add registered members");
             }
         });
-
-
     }
 }

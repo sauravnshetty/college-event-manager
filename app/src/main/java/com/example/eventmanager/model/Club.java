@@ -4,7 +4,9 @@ import android.net.Uri;
 
 import com.google.firebase.database.Exclude;
 
-public class Club {
+import java.io.Serializable;
+
+public class Club implements Serializable {
 
     private String name;
     private String branch;
