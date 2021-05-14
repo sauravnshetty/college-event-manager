@@ -7,6 +7,8 @@ import androidx.fragment.app.DialogFragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,6 +43,14 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private DatabaseReference mDatabase;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("edit");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
