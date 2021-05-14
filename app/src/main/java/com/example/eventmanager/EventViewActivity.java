@@ -33,12 +33,14 @@ import com.google.firebase.storage.StorageReference;
 public class EventViewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = "EventViewActivity";
-    private String eventId;
+    private String eventId, eventClubId;
     private ImageView eventImage;
     private TextView eventNameTv,clubNameTv,eventDateTv,eventTimeTv,eventVenueTv,eventDescriptionTv,eventOrganizerTv;
     private Button registerBtn,registerListBtn;
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         eventImage = findViewById(R.id.eventImage);
         eventNameTv = findViewById(R.id.eventName);
@@ -56,9 +59,13 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         eventVenueTv = findViewById(R.id.eventVenue);
         eventDescriptionTv = findViewById(R.id.eventDescription);
         eventOrganizerTv = findViewById(R.id.eventOrganizer);
+
         registerBtn = findViewById(R.id.eventRegisterBtn);
         registerBtn.setOnClickListener(this);
+
         registerListBtn = findViewById(R.id.registerListBtn);
+        registerListBtn.setEnabled(false);
+        registerListBtn.setVisibility(View.GONE);
         registerListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +79,22 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     protected void onStart() {
         super.onStart();
         eventId = getIntent().getStringExtra("selectedEventId");
+        eventClubId = getIntent().getStringExtra("eventClubId");
+
+        DatabaseReference clubmembersRef = FirebaseDatabase.getInstance().getReference().child("clubmembers");
+        clubmembersRef.child(eventClubId).child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    registerListBtn.setEnabled(true);
+                    registerListBtn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("events");
         eventsRef.child(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,17 +124,17 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
                 Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(eventImage);
             }
         })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Failed to get event image");
-                    }
-                });
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Failed to get event image");
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        DatabaseReference registerRef = FirebaseDatabase.getInstance().getReference().child("registeredmembers").child(eventId);
+        DatabaseReference registerRef = mDatabase.child("registeredmembers").child(eventId);
         registerRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

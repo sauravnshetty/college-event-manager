@@ -92,13 +92,17 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             String eventName = this.eventName.getText().toString();
             String eventDate = this.date.getText().toString();
             String selectedEventId = null;
+            String eventClubId = null;
             for(int i = 0; i < eventsList.size(); i++) {
                 if(eventsList.get(i).getEventName().equals(eventName) &&  eventsList.get(i).getEventDate().equals(eventDate)) {
                     selectedEventId = eventsList.get(i).getEventId();
+                    eventClubId = eventsList.get(i).getEventClubId();
                 }
             }
             eventViewIntent.putExtra("selectedEventId", selectedEventId);
-            context.startActivity(eventViewIntent);
+            eventViewIntent.putExtra("eventClubId", eventClubId);
+            if(selectedEventId != null && eventClubId != null)
+                context.startActivity(eventViewIntent);
         }
 
     }
