@@ -58,6 +58,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        createClubBtn.setEnabled(false);
+        createClubBtn.setVisibility(View.GONE);
         createClubBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +107,11 @@ public class ProfileFragment extends Fragment {
             profileEmail.setText(personEmail);
             profileBranch.setText(personBranch);
             Glide.with(this).load(String.valueOf(personPhoto)).into(profileImg);
+
+            if(acct.isAdmin()) {
+                createClubBtn.setEnabled(true);
+                createClubBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 

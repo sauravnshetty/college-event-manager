@@ -18,6 +18,8 @@ import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.model.Club;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +28,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ClubViewActivity extends AppCompatActivity implements View.OnClickListener {
+public class ClubViewActivity extends AppCompatActivity {
 
     private final String TAG = "ClubViewActivity";
+
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     private TextView clubNameTv, clubBranchTv, clubIntroTv;
     private ImageView clubImage;
@@ -43,6 +48,9 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club_view);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         clubNameTv = findViewById(R.id.clubName);
         clubBranchTv = findViewById(R.id.clubBranch);
         clubIntroTv = findViewById(R.id.clubIntro);
@@ -50,13 +58,24 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
 
         addMembersBtn = findViewById(R.id.addMembersBtn);
 
+        addMembersBtn.setEnabled(false);
+        addMembersBtn.setVisibility(View.GONE);
         addMembersBtn.setOnClickListener(view -> {
             DialogFragment dialog = new AddMembersDialogFragment(clubId);
             dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
         });
 
         createEventBtn = findViewById(R.id.createEventBtn);
-        createEventBtn.setOnClickListener(this);
+        createEventBtn.setEnabled(false);
+        createEventBtn.setVisibility(View.GONE);
+        createEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
+                i.putExtra("clubName",clubNameTv.getText().toString());
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -65,7 +84,21 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
 
         clubId = getIntent().getStringExtra("selectedClubId");
 
-        DatabaseReference clubsRef = FirebaseDatabase.getInstance().getReference().child("clubs");
+        mDatabase.child("clubmembers").child(clubId).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    createEventBtn.setEnabled(true);
+                    createEventBtn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        DatabaseReference clubsRef = mDatabase.child("clubs");
         clubsRef.child(clubId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,10 +130,4 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
-        i.putExtra("clubName",clubNameTv.getText().toString());
-        startActivity(i);
-    }
 }
