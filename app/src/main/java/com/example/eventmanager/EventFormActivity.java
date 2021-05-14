@@ -50,6 +50,7 @@ public class EventFormActivity extends AppCompatActivity {
     private ImageView eventImage;
     private Uri imageUri;
     private int eventHour,eventMin;
+    private String clubId;
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
@@ -60,6 +61,7 @@ public class EventFormActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String eventClubName = intent.getStringExtra("clubName");
+        clubId = intent.getStringExtra("clubId");
 
         eventClubNameTv = findViewById(R.id.clubNameEt);
         eventClubNameTv.setText(eventClubName);
@@ -131,7 +133,8 @@ public class EventFormActivity extends AppCompatActivity {
                                         eventTimeTv.getText().toString(),
                                         eventVenueEt.getText().toString(),
                                         eventDescriptionEt.getText().toString(),
-                                        eventOrganizerEt.getText().toString());
+                                        eventOrganizerEt.getText().toString(),
+                                        clubId);
 
             mDatabaseReference.child(eventId).setValue(newEvent);
             Toast.makeText(getApplicationContext(), "Event added, hopefully", Toast.LENGTH_SHORT).show();

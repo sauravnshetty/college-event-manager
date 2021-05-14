@@ -101,6 +101,7 @@ public class ClubViewActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
         i.putExtra("clubName",clubNameTv.getText().toString());
+        i.putExtra("clubId",clubId);
         startActivity(i);
     }
 }

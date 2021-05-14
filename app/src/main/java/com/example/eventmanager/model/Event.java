@@ -14,11 +14,12 @@ public class Event {
     private String eventVenue;
     private String eventDescription;
     private String eventOrganizers;
+    private String eventClubId;
 
     public Event() {
     }
 
-    public Event(String eventName, String eventClubName, String eventDate, String eventTime, String eventVenue, String eventDescription, String eventOrganizers) {
+    public Event(String eventName, String eventClubName, String eventDate, String eventTime, String eventVenue, String eventDescription, String eventOrganizers,String eventClubId) {
         this.eventName = eventName;
         this.eventClubName = eventClubName;
         this.eventDate = eventDate;
@@ -26,6 +27,7 @@ public class Event {
         this.eventVenue = eventVenue;
         this.eventDescription = eventDescription;
         this.eventOrganizers = eventOrganizers;
+        this.eventClubId = eventClubId;
     }
 
     public String getEventId() {
@@ -90,6 +92,14 @@ public class Event {
 
     public void setEventOrganizers(String eventOrganizers) {
         this.eventOrganizers = eventOrganizers;
+    }
+
+    public String getEventClubId() {
+        return eventClubId;
+    }
+
+    public void setEventClubId(String eventClubId) {
+        this.eventClubId = eventClubId;
     }
 
 }
