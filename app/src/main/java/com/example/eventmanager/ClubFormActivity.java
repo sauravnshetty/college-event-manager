@@ -82,6 +82,9 @@ public class ClubFormActivity extends AppCompatActivity {
             Club newClub = new Club(clubNameEt.getText().toString(), clubBranchEt.getText().toString(),
                     clubIntroEt.getText().toString());
 
+            //This was a major bug ^_^ , every time clubId of the model class used to be null!!!
+            newClub.setClubId(clubId);
+
             mDatabaseReference.child(clubId).setValue(newClub);
             Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
             finish();

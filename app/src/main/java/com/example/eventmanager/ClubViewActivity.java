@@ -78,6 +78,7 @@ public class ClubViewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
                 i.putExtra("clubName",clubNameTv.getText().toString());
+                i.putExtra("eventObject", (Bundle) null);
                 i.putExtra("clubId",clubId);
                 startActivity(i);
             }

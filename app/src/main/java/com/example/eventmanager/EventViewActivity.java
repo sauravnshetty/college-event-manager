@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.eventviewui.RegisteredMembersDialogFragment;
 import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.Event;
+import com.example.eventmanager.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,12 +47,56 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private DatabaseReference mDatabase;
+    private Event editableEvent;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.new_top_menu, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.new_top_menu, menu);
+        menu.getItem(0).setEnabled(false);
+        menu.getItem(0).setVisible(false);
+
+        mDatabase.child("clubmembers").child(eventClubId).child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    menu.getItem(0).setEnabled(true);
+                    menu.getItem(0).setVisible(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.add_members);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.edit:
+                editEvent();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void editEvent() {
+        Intent i = new Intent(getApplicationContext(),EventFormActivity.class);
+        i.putExtra("clubName",clubNameTv.getText().toString());
+        i.putExtra("clubId",eventClubId);
+        i.putExtra("eventObject", editableEvent);
+        startActivity(i);
     }
 
     @Override
@@ -110,6 +158,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Event event = snapshot.getValue(Event.class);
+                editableEvent = event;
                 eventNameTv.setText(event.getEventName());
                 clubNameTv.setText(event.getEventClubName());
                 eventDateTv.setText(event.getEventDate());

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.Event;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,6 +52,7 @@ public class EventFormActivity extends AppCompatActivity {
     private Uri imageUri;
     private int eventHour,eventMin;
     private String clubId;
+    private Event editableEvent;
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
@@ -62,6 +64,8 @@ public class EventFormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String eventClubName = intent.getStringExtra("clubName");
         clubId = intent.getStringExtra("clubId");
+        editableEvent = (Event) intent.getSerializableExtra("eventObject");
+
 
         eventClubNameTv = findViewById(R.id.clubNameEt);
         eventClubNameTv.setText(eventClubName);
@@ -124,7 +128,13 @@ public class EventFormActivity extends AppCompatActivity {
 
         submitBtn.setOnClickListener(view -> {
             DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
-            String eventId= mDatabaseReference.push().getKey();
+            String eventId;
+            if(editableEvent != null){
+                eventId = editableEvent.getEventId();
+            }
+            else {
+                eventId= mDatabaseReference.push().getKey();
+            }
             uploadFile(eventId);
             //event constructor
             Event newEvent = new Event(eventNameEt.getText().toString(),
@@ -135,12 +145,42 @@ public class EventFormActivity extends AppCompatActivity {
                                         eventDescriptionEt.getText().toString(),
                                         eventOrganizerEt.getText().toString(),
                                         clubId);
-
+            newEvent.setEventId(eventId);
             mDatabaseReference.child(eventId).setValue(newEvent);
             Toast.makeText(getApplicationContext(), "Event added, hopefully", Toast.LENGTH_SHORT).show();
             finish();
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(editableEvent!=null){
+            eventNameEt.setText(editableEvent.getEventName());
+            eventDateTv.setText(editableEvent.getEventDate());
+            eventTimeTv.setText(editableEvent.getEventTime());
+            eventVenueEt.setText(editableEvent.getEventVenue());
+            eventDescriptionEt.setText(editableEvent.getEventDescription());
+            eventOrganizerEt.setText(editableEvent.getEventOrganizers());
+
+            StorageReference fileReference  = FirebaseStorage.getInstance().getReference().child("eventImages");
+
+            fileReference.child(editableEvent.getEventId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(eventImage);
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Failed to get event image");
+                        }
+                    });
+        }
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
