@@ -46,9 +46,8 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("edit");
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_menu, menu);
+        inflater.inflate(R.menu.new_top_menu, menu);
         return true;
     }
 
