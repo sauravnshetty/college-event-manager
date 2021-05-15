@@ -12,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManager">
-        <activity android:name=".EventFormActivity"></activity>
+        <activity android:name=".EventFormActivity"
+            android:launchMode="singleTop"
+            android:noHistory="false">
+
+        </activity>
         <activity android:name=".EventViewActivity" />
         <activity android:name=".ClubViewActivity" />
         <activity android:name=".ClubFormActivity" />

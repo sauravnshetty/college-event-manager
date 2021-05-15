@@ -33,6 +33,15 @@ android {
 
 dependencies {
 
+    //second try for circular image
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
+    //below three implementations for circular image view
+    //noinspection GradleCompatible
+   // implementation 'com.android.support:CardView-v7:28.0.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

@@ -51,11 +51,11 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.eventName.setText(event.getEventName());
         holder.date.setText(event.getEventDate());
 
-        StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
-        clubImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
+        eventImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(context).load(String.valueOf(uri)).into(holder.eventImage);
+                Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.eventImage);
             }
         })
                 .addOnFailureListener(new OnFailureListener() {

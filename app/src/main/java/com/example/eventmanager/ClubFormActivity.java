@@ -82,6 +82,9 @@ public class ClubFormActivity extends AppCompatActivity {
             Club newClub = new Club(clubNameEt.getText().toString(), clubBranchEt.getText().toString(),
                     clubIntroEt.getText().toString());
 
+            //This was a major bug ^_^ , every time clubId of the model class used to be null!!!
+            newClub.setClubId(clubId);
+
             mDatabaseReference.child(clubId).setValue(newClub);
             Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
             finish();
@@ -98,6 +101,7 @@ public class ClubFormActivity extends AppCompatActivity {
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                Glide.with(getApplicationContext()).load(String.valueOf(imageUri)).centerCrop().into(clubImage);
                 clubImage.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -117,7 +121,7 @@ public class ClubFormActivity extends AppCompatActivity {
         clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(clubImage);
+                Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(clubImage);
             }
         })
         .addOnFailureListener(new OnFailureListener() {
