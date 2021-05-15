@@ -1,9 +1,11 @@
 package com.example.eventmanager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,6 +50,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     private FirebaseUser currentUser;
     private DatabaseReference mDatabase;
     private Event editableEvent;
+    private AlertDialog.Builder builder;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -55,6 +58,8 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         menuInflater.inflate(R.menu.new_top_menu, menu);
         menu.getItem(0).setEnabled(false);
         menu.getItem(0).setVisible(false);
+        menu.getItem(1).setVisible(false);
+        menu.getItem(1).setEnabled(false);
 
         mDatabase.child("clubmembers").child(eventClubId).child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -62,6 +67,8 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
                 if(snapshot.exists()) {
                     menu.getItem(0).setEnabled(true);
                     menu.getItem(0).setVisible(true);
+                    menu.getItem(1).setEnabled(true);
+                    menu.getItem(1).setVisible(true);
                 }
             }
 
@@ -86,9 +93,56 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
             case R.id.edit:
                 editEvent();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.delete:
+                deleteEvent();
+                return true;
         }
+        return false;
+    }
+
+    private void deleteEvent() {
+        //Setting message manually and performing action on button click
+        builder.setMessage("Are you sure want to delete?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
+                        eventImagesRef.child(eventId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(),"deleted successfully",Toast.LENGTH_SHORT).show();
+                                //deleted
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //some error occurred
+                            }
+                        });
+
+                        mDatabase.child("events").child(eventId).removeValue();
+                        mDatabase.child("registeredmembers").child(eventId).removeValue();
+                        Intent intent=new Intent(getApplicationContext(),NavigationActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                        Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Warning");
+        alert.show();
+
     }
 
     private void editEvent() {
@@ -103,6 +157,9 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
+
+        //initialising alert dialog builder
+        builder = new AlertDialog.Builder(this);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
