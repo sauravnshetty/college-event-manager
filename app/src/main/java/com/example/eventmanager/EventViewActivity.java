@@ -4,7 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +36,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EventViewActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -160,5 +170,41 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
                 Log.d(TAG, "onCancelled:failed to add registered members");
             }
         });
+        fireAlarm();
+    }
+
+    public void fireAlarm() {
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("eventName", eventNameTv.getText().toString());
+        //intent.setAction("EVENT_REMINDER");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 111, intent,0);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+        String dateTime = eventDateTv.getText().toString().trim() + " " + eventTimeTv.getText().toString().trim();
+        //dateTime = "15-05-2021 12:04 am";
+        Log.d(TAG, dateTime);
+        try {
+            Date date = sdf.parse(dateTime);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, -1);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pendingIntent);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarm.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarm.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+
+            Log.d(TAG, "ALARM IS SET " + calendar);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //AlarmReceiver alm = new AlarmReceiver();
+        //alm.createNotification(getApplicationContext(), "test", "works fine");
     }
 }
