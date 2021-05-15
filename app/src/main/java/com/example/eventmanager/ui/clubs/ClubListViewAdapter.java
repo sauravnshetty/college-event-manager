@@ -61,7 +61,7 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
         clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(context).load(String.valueOf(uri)).into(holder.clubImage);
+                Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.clubImage);
             }
         })
         .addOnFailureListener(new OnFailureListener() {

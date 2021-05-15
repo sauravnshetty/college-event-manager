@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
 
+import java.util.Objects;
+
 import static com.example.eventmanager.R.menu.top_menu;
 
 public class ClubListFragment extends Fragment {
@@ -25,7 +28,9 @@ public class ClubListFragment extends Fragment {
     private ClubListViewModel clubListViewModel;
     private ClubListViewAdapter clubViewAdapter;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         clubListViewModel = new ViewModelProvider(this).get(ClubListViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_club_list, container, false);
@@ -75,4 +80,5 @@ public class ClubListFragment extends Fragment {
         });
         super.onCreateOptionsMenu(menu, inflater);
     }
+
 }

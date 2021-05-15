@@ -14,6 +14,30 @@
         android:background="@drawable/grad"
         android:paddingBottom="20dp">
 
+        <!--
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
+                android:id="@+id/myCardView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:cardCornerRadius="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                >
+                <ImageView
+                    android:id="@+id/roundedimage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    />
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+        -->
+
         <RelativeLayout
             android:id="@+id/imgUser"
             android:layout_width="wrap_content"
@@ -22,6 +46,20 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/circle_border">
 
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profile_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_user"
+                 />
+            <!--
+            app:civ_shadow="true"
+             app:civ_shadow_radius="10dp"
+            app:civ_border_width="2dp
+            app:civ_border_color="@color/grey"
+             app:civ_shadow_color="#3f51b5"
+             -->
+             <!--
             <ImageView
                 android:id="@+id/profile_image"
                 android:layout_width="120dp"
@@ -33,12 +71,14 @@
                 android:layout_marginRight="9dp"
                 android:layout_marginBottom="9dp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/circle"
+                android:background="@drawable/img"
                 android:padding="3dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_user" />
+                -->
 
         </RelativeLayout>
+
 
         <TextView
             android:id="@+id/profile_name"

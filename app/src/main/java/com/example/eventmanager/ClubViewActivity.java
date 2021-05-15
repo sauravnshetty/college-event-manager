@@ -138,7 +138,7 @@ public class ClubViewActivity extends AppCompatActivity {
         clubImagesRef.child(clubId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(clubImage);
+                Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(clubImage);
             }
         })
         .addOnFailureListener(new OnFailureListener() {

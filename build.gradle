@@ -15,6 +15,8 @@ buildscript {
 
 allprojects {
     repositories {
+        //TODO : this needs to be deleted if not neccessary
+        maven { url "https://jitpack.io" } //for image cropping
         google()
         jcenter()
     }
