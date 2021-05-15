@@ -225,6 +225,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Event event = snapshot.getValue(Event.class);
+                event.setEventId(snapshot.getKey());
                 editableEvent = event;
                 eventNameTv.setText(event.getEventName());
                 clubNameTv.setText(event.getEventClubName());
@@ -283,8 +284,10 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
 
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("eventName", eventNameTv.getText().toString());
+        intent.putExtra("eventId", eventId);
+        intent.putExtra("eventClubId", eventClubId);
         //intent.setAction("EVENT_REMINDER");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 111, intent,0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) System.currentTimeMillis(), intent,0);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
         String dateTime = eventDateTv.getText().toString().trim() + " " + eventTimeTv.getText().toString().trim();
@@ -296,7 +299,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
             calendar.setTime(date);
             calendar.add(Calendar.HOUR, -1);
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pendingIntent);
+            //alarm.cancel(pendingIntent);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarm.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

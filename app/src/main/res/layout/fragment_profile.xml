@@ -50,8 +50,7 @@
                 android:id="@+id/profile_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/ic_user"
-                 />
+                android:src="@drawable/ic_user" />
             <!--
             app:civ_shadow="true"
              app:civ_shadow_radius="10dp"

@@ -13,6 +13,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.eventmanager.model.Event;
+
 import static androidx.core.content.ContextCompat.getSystemService;
 import static com.example.eventmanager.App.EVENT_CHANNEL_ID;
 
@@ -21,13 +23,18 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
     private final String ACTION = "EVENT_REMINDER";
 
+    private String eventId, eventClubId;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         //String action = intent.getAction();
         //if(ACTION.equals(action)) {
-            createNotification(context, intent.getStringExtra("eventName"),"Are you ready? Event starts in 1 hour");
-            Log.d(TAG, "NOTIFICATION SHOULD DISPLAY NOW");
+        String eventName = intent.getStringExtra("eventName");
+        eventId = intent.getStringExtra("eventId");
+        eventClubId = intent.getStringExtra("eventClubId");
+        createNotification(context, eventName,"Are you ready? Just 1 hour left for " + eventName);
+        Log.d(TAG, "NOTIFICATION SHOULD DISPLAY NOW");
         //}
     }
 
@@ -39,9 +46,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.nitte.edu.in"));
+        Intent intent = new Intent(context, EventViewActivity.class);
+        intent.putExtra("selectedEventId", eventId);
+        intent.putExtra("eventClubId", eventClubId);
 
-        PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
+        PendingIntent pending = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
         mBuilder.setContentIntent(pending);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);

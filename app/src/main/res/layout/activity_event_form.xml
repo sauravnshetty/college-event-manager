@@ -89,12 +89,6 @@
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -118,12 +112,6 @@
                         android:text=""
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
 
                 </LinearLayout>
 
@@ -150,17 +138,13 @@
                         android:textSize="18sp"
                         android:maxLines="4"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -179,16 +163,11 @@
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
-
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -207,16 +186,11 @@
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
-
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -235,16 +209,17 @@
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:background="@color/grey" />-->
 
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -263,11 +238,11 @@
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:background="@color/grey" />-->
 
                 </LinearLayout>
 
