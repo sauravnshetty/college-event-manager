@@ -126,7 +126,7 @@
     <string name="register">REGISTER</string>
     <string name="view_registered_members">View Registered Members</string>
     <string name="profile_image">PROFILE IMAGE</string>
-    <string name="profile_page_intro">Hello Nmamitian, Please use your college email id to sign in.</string>
+    <string name="profile_page_intro">Hello Nmamitian, \nPlease use your college email id to sign in.</string>
     <string name="event_manager">Event Manager</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
