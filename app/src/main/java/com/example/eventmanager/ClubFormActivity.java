@@ -83,7 +83,7 @@ public class ClubFormActivity extends AppCompatActivity {
 
             assert clubId != null;
             mDatabaseReference.child(clubId).setValue(newClub);
-            Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Club added, successfully", Toast.LENGTH_SHORT).show();
             finish();
         });
     }
@@ -121,7 +121,6 @@ public class ClubFormActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void showClubDetailsInUI(Club club) {
         clubNameEt.setText(club.getName());
         clubBranchEt.setText(club.getBranch());
@@ -143,7 +142,7 @@ public class ClubFormActivity extends AppCompatActivity {
 
             UploadTask uploadTask = fileReference.putFile(imageUri);
                     uploadTask.addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(getApplicationContext(), "Upload Successfully", Toast.LENGTH_SHORT).show();
+
                         //progressDialog.show();
                         progressDialog.setCanceledOnTouchOutside(false);
                         progressDialog.dismiss();
