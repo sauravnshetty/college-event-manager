@@ -2,7 +2,6 @@ package com.example.eventmanager.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmanager.ClubViewActivity;
 import com.example.eventmanager.EventViewActivity;
-import com.example.eventmanager.model.Club;
-import com.example.eventmanager.model.Event;
-import com.example.eventmanager.model.EventRowItem;
 import com.example.eventmanager.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.eventmanager.model.Event;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -33,7 +27,7 @@ import java.util.List;
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "EventRViewAdapter";
-    private Context context;
+    private final Context context;
     private List<Event> eventsList;
     private List<Event> eventsListFull;
 
@@ -58,18 +52,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.date.setText(event.getEventDate());
 
         StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
-        eventImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.eventImage);
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Failed to get event image");
-                    }
-                });
+        eventImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.eventImage))
+                .addOnFailureListener(e -> Log.d(TAG, "Failed to get event image"));
     }
 
     @Override

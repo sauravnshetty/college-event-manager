@@ -1,9 +1,5 @@
 package com.example.eventmanager.model;
 
-import android.net.Uri;
-
-import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
 
 public class Event implements Serializable {

@@ -19,8 +19,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="9"
-                android:text="User name"
-                android:textSize="20dp" />
+                android:text="@string/user_name"
+                android:textSize="20sp" />
 
             <CheckBox
                 android:id="@+id/selectedCb"
@@ -34,7 +34,7 @@
             android:id="@+id/userEmailTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="email"
+            android:text="@string/email"
             android:textSize="15sp" />
 
     </LinearLayout>

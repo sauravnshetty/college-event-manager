@@ -1,32 +1,26 @@
 package com.example.eventmanager;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.eventmanager.model.Event;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 import static com.example.eventmanager.App.EVENT_CHANNEL_ID;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "AlarmReceiver";
-    private final String ACTION = "EVENT_REMINDER";
+    //private final String ACTION = "EVENT_REMINDER";
 
     private String eventId, eventClubId;
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
 

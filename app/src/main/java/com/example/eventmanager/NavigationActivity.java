@@ -1,7 +1,5 @@
 package com.example.eventmanager;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,6 +19,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import org.jetbrains.annotations.NotNull;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -45,14 +45,13 @@ public class NavigationActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    private boolean addUserToDatabase() {
+    private void addUserToDatabase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if (user != null) {
             Log.d(TAG, "Adding user to database " + user.getEmail());
             writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), "", "", false);
         }
-        return false;
     }
 
     public void parseUserFromEmail(User user) {
@@ -100,7 +99,7 @@ public class NavigationActivity extends AppCompatActivity {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     Log.d(TAG, "User added " + user.getEmail());
                     mDatabase.child("users").child(userId).setValue(user);

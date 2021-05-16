@@ -1,6 +1,5 @@
 package com.example.eventmanager.ui.profile;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,8 +28,6 @@ import com.example.eventmanager.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.example.eventmanager.R.menu.delete_top_menu;
+import static com.example.eventmanager.R.menu.exit_top_menu;
 
 public class ProfileFragment extends Fragment {
 
@@ -51,13 +48,11 @@ public class ProfileFragment extends Fragment {
     private AlertDialog.Builder builder;
     private GoogleSignInClient mGoogleSignInClient;
 
-    private ProfileViewModel profileViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         builder = new AlertDialog.Builder(requireContext());
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        new ViewModelProvider(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         //final TextView textView = root.findViewById(R.id.textView);
 
@@ -67,21 +62,13 @@ public class ProfileFragment extends Fragment {
         profileName = root.findViewById(R.id.profile_name);
         signOut = root.findViewById(R.id.profile_signout);
         createClubBtn = root.findViewById(R.id.createClubBtn);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
+        signOut.setOnClickListener(v -> signOut());
 
         createClubBtn.setEnabled(false);
         createClubBtn.setVisibility(View.GONE);
-        createClubBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createClubIntent = new Intent(getActivity(), ClubFormActivity.class);
-                startActivity(createClubIntent);
-            }
+        createClubBtn.setOnClickListener(view -> {
+            Intent createClubIntent = new Intent(getActivity(), ClubFormActivity.class);
+            startActivity(createClubIntent);
         });
 
         return root;
@@ -98,9 +85,10 @@ public class ProfileFragment extends Fragment {
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
 
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
+        assert acct != null;
         String userId = acct.getUid();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -126,6 +114,7 @@ public class ProfileFragment extends Fragment {
             String personName = acct.getName();
             String personEmail = acct.getEmail();
             String personBranch = acct.getBranch();
+            assert user != null;
             Uri personPhoto = user.getPhotoUrl();
 
             profileName.setText(personName);
@@ -143,10 +132,7 @@ public class ProfileFragment extends Fragment {
     private void signOut() {
 
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                    }
+                .addOnCompleteListener(requireActivity(), task -> {
                 });
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getActivity(),
@@ -158,7 +144,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(delete_top_menu, menu);
+        inflater.inflate(exit_top_menu, menu);
         MenuItem deleteItem = menu.findItem(R.id.action_delete);
         deleteItem.setOnMenuItemClickListener(item -> {
             exitApp();
@@ -172,18 +158,14 @@ public class ProfileFragment extends Fragment {
     private void exitApp() {
         builder.setMessage("Are you sure you want to exit?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getActivity().moveTaskToBack(true);
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                        System.exit(1);
-                    }
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    requireActivity().moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                    }
+                .setNegativeButton("No", (dialog, id) -> {
+                    //  Action for 'NO' Button
+                    dialog.cancel();
                 });
         //Creating dialog box
         AlertDialog alert = builder.create();

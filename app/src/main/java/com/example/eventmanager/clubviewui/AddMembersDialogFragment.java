@@ -1,19 +1,8 @@
 package com.example.eventmanager.clubviewui;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +10,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
 import com.example.eventmanager.model.User;
@@ -33,20 +29,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AddMembersDialogFragment extends DialogFragment {
 
     private final String TAG = "DialogFragment: ";
 
-    private AddMembersDialogViewModel mViewModel;
     private UserListViewAdapter userListAdapter;
     private String clubId;
 
     private Dialog dialog;
-
-    public static AddMembersDialogFragment newInstance() {
-        return new AddMembersDialogFragment();
-    }
 
     public AddMembersDialogFragment() { super(); }
 
@@ -58,11 +50,12 @@ public class AddMembersDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(AddMembersDialogViewModel.class);
+        AddMembersDialogViewModel mViewModel = new ViewModelProvider(this).get(AddMembersDialogViewModel.class);
         //TODO: add a button to dialog view which adds the selected members
         //  also a heading and a cancel button
+        // and set default check for the members already in the club
 //        builder = new AlertDialog.Builder(getActivity());
-        View dialogView = inflater.inflate(R.layout.add_members_dialog_fragment, null);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.add_members_dialog_fragment, null);
         Button addBtn, cancelBtn;
 //        builder.setView(dialogView)
 //                .setPositiveButton("Add Selected", new DialogInterface.OnClickListener() {
@@ -87,7 +80,7 @@ public class AddMembersDialogFragment extends DialogFragment {
             usersRecyclerView.setAdapter(userListAdapter);
         });
 
-        SearchView searchView = (SearchView) dialogView.findViewById(R.id.dialog_search);
+        SearchView searchView = dialogView.findViewById(R.id.dialog_search);
 
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -107,54 +100,49 @@ public class AddMembersDialogFragment extends DialogFragment {
         addBtn = dialogView.findViewById(R.id.addBtn);
         cancelBtn = dialogView.findViewById(R.id.cancelBtn);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        addBtn.setOnClickListener(view -> {
 
-                //getting selected users by checking the view
-                View itemView;
-                List<User> selectedUsers = new ArrayList<>();
-                for(int i = 0; i < userListAdapter.getItemCount(); i++) {
-                    itemView = usersRecyclerView.getLayoutManager().findViewByPosition(i);
-                    CheckBox cb = itemView.findViewById(R.id.selectedCb);
-                    if(cb.isChecked()) {
-                        selectedUsers.add(userListAdapter.getItem(i));
-                    }
+            //getting selected users by checking the view
+            View itemView;
+            List<User> selectedUsers = new ArrayList<>();
+            for(int i = 0; i < userListAdapter.getItemCount(); i++) {
+                itemView = Objects.requireNonNull(usersRecyclerView.getLayoutManager()).findViewByPosition(i);
+                assert itemView != null;
+                CheckBox cb = itemView.findViewById(R.id.selectedCb);
+                if(cb.isChecked()) {
+                    selectedUsers.add(userListAdapter.getItem(i));
                 }
-
-                //Adding selected users as club members
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("clubmembers").child(clubId);
-
-                for(User user : selectedUsers) {
-                    String userId = user.getUid();
-                    String userName = user.getName();
-
-                    ref.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(!snapshot.exists()) {
-                                ref.child(userId).setValue(userName);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.d(TAG, "Failed to add a member");
-                        }
-                    });
-                }
-                Log.d(TAG, "Added " + selectedUsers.size() + " members!");
-                //Toast.makeText(getActivity(), "Added " + selectedUsers.size() + " members!", Toast.LENGTH_SHORT);
-                dialog.dismiss();
             }
+
+            //Adding selected users as club members
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("clubmembers").child(clubId);
+
+            for(User user : selectedUsers) {
+                String userId = user.getUid();
+                String userName = user.getName();
+
+                ref.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(!snapshot.exists()) {
+                            ref.child(userId).setValue(userName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.d(TAG, "Failed to add a member");
+                    }
+                });
+            }
+            Log.d(TAG, "Added " + selectedUsers.size() + " members!");
+            //Toast.makeText(getActivity(), "Added " + selectedUsers.size() + " members!", Toast.LENGTH_SHORT);
+            dialog.dismiss();
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //getActivity().getFragmentManager().popBackStack();
-                dialog.dismiss();
-            }
+        cancelBtn.setOnClickListener(view -> {
+            //getActivity().getFragmentManager().popBackStack();
+            dialog.dismiss();
         });
 
         return dialogView;

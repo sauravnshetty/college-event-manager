@@ -18,7 +18,7 @@
                 android:id="@+id/eventImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="Event poster"
+                android:contentDescription="@string/event_poster"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -51,7 +51,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Club"
+                    android:text="@string/club"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -80,7 +80,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DATE"
+                    android:text="@string/date"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -109,7 +109,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Time"
+                    android:text="@string/time"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -138,7 +138,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Venue"
+                    android:text="@string/venue"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -167,7 +167,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Event Description"
+                    android:text="@string/description"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -195,7 +195,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Organiser/s"
+                    android:text="@string/organizer_s"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -229,7 +229,7 @@
             android:background="@drawable/mybutton"
             android:padding="10dp"
             android:rotationY="2"
-            android:text="REGISTER"
+            android:text="@string/register"
             android:textColor="?android:textColorPrimary" />
 
         <Button
@@ -240,7 +240,7 @@
             android:background="@color/black"
             android:padding="10dp"
             android:rotationY="2"
-            android:text="View Registered Members"
+            android:text="@string/view_registered_members"
             android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>
