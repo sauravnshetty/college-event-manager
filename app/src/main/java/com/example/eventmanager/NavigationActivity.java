@@ -57,6 +57,10 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void parseUserFromEmail(User user) {
         String email = user.getEmail();
+        if(!email.startsWith("4nm")) {
+            user.setBranch("Faculty/Staff");
+            return;
+        }
         String usn = email.replace("@nmamit.in", "");
         user.setUsn(usn);
 
@@ -82,6 +86,8 @@ public class NavigationActivity extends AppCompatActivity {
             case "ee":
                 user.setBranch("Electronics and Electricals");
                 break;
+            default:
+                user.setBranch("unable to find");
         }
     }
 

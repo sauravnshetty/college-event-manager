@@ -50,7 +50,7 @@
                 android:id="@+id/profile_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/ic_user" />
+                android:contentDescription="PROFILE IMAGE"/>
 
         </RelativeLayout>
 
@@ -91,8 +91,7 @@
             android:layout_marginEnd="124dp"
             android:layout_marginRight="126dp"
             android:text="Create a club"
-
-            android:textColor="#FFFEFE"/>
+            android:textColor="?android:textColorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,7 +140,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Branch"
+                    android:text="Department"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 

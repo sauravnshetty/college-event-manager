@@ -17,7 +17,8 @@
                 android:id="@+id/clubImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_user" />
+                android:src="@drawable/ic_dashboard_black_24dp"
+                android:contentDescription="club image"/>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView

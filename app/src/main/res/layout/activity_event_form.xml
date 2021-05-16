@@ -37,7 +37,7 @@
                     android:adjustViewBounds="true"
                     android:padding="3dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_user" />
+                    android:contentDescription="Event Poster"/>
 
             </RelativeLayout>
             <TextView

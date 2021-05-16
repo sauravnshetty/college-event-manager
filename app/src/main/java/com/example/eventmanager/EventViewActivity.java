@@ -247,7 +247,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         eventImagesRef.child(eventId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(eventImage);
+                Glide.with(getApplicationContext()).load(String.valueOf(uri)).fitCenter().into(eventImage);
             }
         })
         .addOnFailureListener(new OnFailureListener() {

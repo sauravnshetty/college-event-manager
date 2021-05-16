@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.">
 
-
     <RelativeLayout
         android:id="@+id/rellay1"
         android:layout_width="match_parent"
@@ -34,7 +33,8 @@
                 android:adjustViewBounds="true"
                 android:padding="3dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_user" />
+                android:contentDescription="clubImage"
+                />
 
         </RelativeLayout>
 
@@ -53,6 +53,7 @@
 
         <TextView
             android:id="@+id/changeImageBtn"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgUser"
