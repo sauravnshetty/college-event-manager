@@ -143,6 +143,12 @@ public class EventFormActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(view -> {
             DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
             String eventId;
+
+            if(!isAllFilled()) {
+                Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if(editableEvent != null){
                 eventId = editableEvent.getEventId();
             }
@@ -164,6 +170,24 @@ public class EventFormActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Event added, hopefully", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    private boolean isAllFilled() {
+        boolean filled = true;
+        if(eventNameEt.getText().toString().trim().equals(""))
+            filled = false;
+        else if(eventDateTv.getText().toString().trim().equals(""))
+            filled = false;
+        else if(eventDescriptionEt.getText().toString().trim().equals(""))
+            filled = false;
+        else if(eventOrganizerEt.getText().toString().trim().equals(""))
+            filled = false;
+        else if(eventTimeTv.getText().toString().trim().equals(""))
+            filled = false;
+        else if(eventVenueEt.getText().toString().trim().equals(""))
+            filled = false;
+
+        return filled;
     }
 
     @Override

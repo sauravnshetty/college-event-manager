@@ -70,6 +70,11 @@ public class ClubFormActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(view -> {
             DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("clubs");
 
+            if(!isAllFilled()) {
+                Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String clubId;
             if(club == null) {
                 //Add a new club
@@ -89,6 +94,18 @@ public class ClubFormActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    private boolean isAllFilled() {
+        boolean filled = true;
+        if(clubNameEt.getText().toString().trim().equals(""))
+            filled = false;
+        else if(clubBranchEt.getText().toString().trim().equals(""))
+            filled = false;
+        else if(clubIntroEt.getText().toString().trim().equals(""))
+            filled = false;
+
+        return filled;
     }
 
     @Override
