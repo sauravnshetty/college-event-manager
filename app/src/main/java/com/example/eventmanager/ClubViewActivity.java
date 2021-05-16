@@ -161,7 +161,7 @@ import static java.util.Arrays.asList;
         clubImagesRef.child(clubId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(clubImage);
+                Glide.with(getApplicationContext()).load(String.valueOf(uri)).fitCenter().into(clubImage);
             }
         })
         .addOnFailureListener(new OnFailureListener() {

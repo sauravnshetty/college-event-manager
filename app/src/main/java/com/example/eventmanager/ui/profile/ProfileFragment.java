@@ -26,6 +26,11 @@ import com.example.eventmanager.ClubFormActivity;
 import com.example.eventmanager.LoginActivity;
 import com.example.eventmanager.R;
 import com.example.eventmanager.model.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +49,7 @@ public class ProfileFragment extends Fragment {
     TextView profileBranch, profileEmail, profileName;
     Button signOut, createClubBtn;
     private AlertDialog.Builder builder;
+    private GoogleSignInClient mGoogleSignInClient;
 
     private ProfileViewModel profileViewModel;
 
@@ -85,6 +91,14 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         String userId = acct.getUid();
@@ -128,6 +142,12 @@ public class ProfileFragment extends Fragment {
 
     private void signOut() {
 
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
         FirebaseAuth.getInstance().signOut();
         Intent i = new Intent(getActivity(),
                 LoginActivity.class);
