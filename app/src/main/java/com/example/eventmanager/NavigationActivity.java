@@ -1,5 +1,6 @@
 package com.example.eventmanager;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
