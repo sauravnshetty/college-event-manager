@@ -21,7 +21,8 @@
         <activity android:name=".ClubViewActivity" />
         <activity android:name=".ClubFormActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashScreen"
             android:label="Event Manager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoginActivity"/>
         <activity android:name=".login" />
         <activity android:name=".NavigationActivity" />
 
