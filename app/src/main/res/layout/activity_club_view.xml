@@ -27,7 +27,7 @@
             android:layout_marginBottom="10dp"
             android:layout_height="30dp"
             android:textAlignment="center"
-            android:text="ACE"
+            android:text=""
             android:fontFamily="sans-serif-light"
             android:textColor="?android:textColorPrimary"
             android:textSize="25sp"
@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:text="Computer Science"
+                        android:text=""
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="This is a ACE club created under computer science branch"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
