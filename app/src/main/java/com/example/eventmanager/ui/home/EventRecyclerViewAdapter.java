@@ -27,7 +27,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> implements Filterable {
@@ -40,7 +45,33 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     public EventRecyclerViewAdapter(Context context, List<Event> eventsList) {
         this.context = context;
         this.eventsList = eventsList;
+        sortByDate(eventsList);
         this.eventsListFull = new ArrayList<>(eventsList);
+    }
+
+    private void sortByDate(List<Event> eventsList) {
+        Collections.sort(eventsList, new Comparator<Event>() {
+            @Override
+            public int compare(Event event1, Event event2) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+                String date1 = event1.getEventDate() + " " + event1.getEventTime();
+                String date2 = event2.getEventDate() + " " + event2.getEventTime();
+                Date dateTime1, dateTime2;
+                try {
+                    dateTime1 = sdf.parse(date1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return 1;
+                }
+                try {
+                    dateTime2 = sdf.parse(date2);
+                    return dateTime2.compareTo(dateTime1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return -1;
+                }
+            }
+        });
     }
 
     @NonNull
