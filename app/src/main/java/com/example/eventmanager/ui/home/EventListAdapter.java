@@ -10,16 +10,23 @@ public class EventListAdapter extends FragmentStateAdapter {
     public EventListAdapter(@NonNull Fragment fragment) {
         super(fragment);
     }
+    private EventListFragment childFragment;
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment childFragment = new EventListFragment();
+        childFragment = new EventListFragment();
         Bundle args = new Bundle();
 
         args.putInt(EventListFragment.ARG_POS, position);
         childFragment.setArguments(args);
         return childFragment;
+    }
+
+    public EventRecyclerViewAdapter getListViewAdapter() {
+        if(childFragment != null)
+            return childFragment.getListViewAdapter();
+        return null;
     }
 
     @Override

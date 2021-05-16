@@ -1,5 +1,6 @@
 package com.example.eventmanager.ui.home;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -11,9 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.inputmethod.EditorInfo;
 
 import com.example.eventmanager.R;
 import com.example.eventmanager.model.Event;
@@ -23,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.example.eventmanager.R.menu.search_menu;
 
 public class EventListFragment extends Fragment {
 
@@ -92,6 +98,8 @@ public class EventListFragment extends Fragment {
             eventRecyclerView.setAdapter(eventViewAdapter);
         });
 
+        //setHasOptionsMenu(true);
+
         return root;
     }
 
@@ -108,11 +116,8 @@ public class EventListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
-        // TODO: Use the ViewModel
+    public EventRecyclerViewAdapter getListViewAdapter() {
+        return eventViewAdapter;
     }
 
 }

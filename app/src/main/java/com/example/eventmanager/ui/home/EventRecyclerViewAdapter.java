@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmanager.ClubViewActivity;
 import com.example.eventmanager.EventViewActivity;
+import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.Event;
 import com.example.eventmanager.model.EventRowItem;
 import com.example.eventmanager.R;
@@ -24,17 +27,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
+public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "EventRViewAdapter";
     private Context context;
     private List<Event> eventsList;
+    private List<Event> eventsListFull;
 
     public EventRecyclerViewAdapter(Context context, List<Event> eventsList) {
         this.context = context;
         this.eventsList = eventsList;
+        this.eventsListFull = new ArrayList<>(eventsList);
     }
 
     @NonNull
@@ -70,6 +76,43 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     public int getItemCount() {
         return eventsList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return eventsListFilter;
+    }
+
+    private Filter eventsListFilter = new Filter() {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Event> filteredList = new ArrayList<>();
+
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(eventsListFull);
+            }
+            else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for(Event item : eventsListFull) {
+                    if(item.getEventName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            eventsList.clear();
+            eventsList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     //removed static keyword for a class
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
 
-import java.util.Objects;
-
-import static com.example.eventmanager.R.menu.top_menu;
+import static com.example.eventmanager.R.menu.search_menu;
 
 public class ClubListFragment extends Fragment {
 
@@ -60,7 +57,7 @@ public class ClubListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
-        inflater.inflate(top_menu, menu);
+        inflater.inflate(search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
@@ -74,7 +71,8 @@ public class ClubListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                clubViewAdapter.getFilter().filter(newText);
+                if(clubViewAdapter != null)
+                    clubViewAdapter.getFilter().filter(newText);
                 return false;
             }
         });
