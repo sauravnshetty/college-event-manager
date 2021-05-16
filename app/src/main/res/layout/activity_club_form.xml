@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,7 +32,7 @@
                 android:adjustViewBounds="true"
                 android:padding="3dp"
                 android:scaleType="centerInside"
-                android:contentDescription="clubImage"
+                android:contentDescription="@string/clubimage"
                 />
 
         </RelativeLayout>
@@ -59,7 +58,7 @@
             android:layout_below="@+id/imgUser"
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
-            android:text="Change club logo"
+            android:text="@string/change_club_logo"
             android:textAllCaps="false"
             android:textColor="@color/address"
             android:textSize="14sp" />
@@ -71,7 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="509dp"
         android:layout_below="@+id/rellay1"
-        android:layout_above="@+id/profile_signout">
+        android:layout_above="@+id/profile_signout"
+        tools:ignore="UnknownIdInLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,7 +80,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Club Name"
+                    android:text="@string/club_name"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -101,7 +102,10 @@
                     android:fontFamily="sans-serif-light"
                     android:text=""
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints=""
+                    android:inputType="textShortMessage"
+                    tools:ignore="LabelFor" />
 
                 <View
                     android:layout_width="match_parent"
@@ -120,7 +124,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Branch"
+                    android:text="@string/branch"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -130,8 +134,11 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text=""
+                    android:hint="@string/branch"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="Enter the branch name"
+                    android:inputType="text" />
 
                 <View
                     android:layout_width="match_parent"
@@ -150,7 +157,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Club intro text/ description"
+                    android:text="@string/club_intro_text_description"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -162,7 +169,10 @@
                     android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp"
-                    android:maxLines="4"/>
+                    android:maxLines="4"
+                    android:autofillHints="Enter description for the club"
+                    android:inputType="textLongMessage"
+                    tools:ignore="LabelFor" />
 
                 <View
                     android:layout_width="match_parent"
@@ -193,7 +203,7 @@
         android:background="@drawable/mybutton"
         android:padding="10dp"
         android:rotationY="2"
-        android:text="Register Club"
+        android:text="@string/register_club"
         android:textColor="#ffffff" />
 
 </RelativeLayout>

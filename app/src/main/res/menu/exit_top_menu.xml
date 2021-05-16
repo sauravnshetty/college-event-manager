@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/common_full_open_on_phone"
-        android:title="exit"
+        android:title="@string/exit"
         app:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

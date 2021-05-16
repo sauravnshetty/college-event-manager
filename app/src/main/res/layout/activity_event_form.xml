@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                     android:adjustViewBounds="true"
                     android:padding="3dp"
                     android:scaleType="centerInside"
-                    android:contentDescription="Event Poster"/>
+                    android:contentDescription="@string/event_poster"/>
 
             </RelativeLayout>
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_below="@+id/imgUser"
                 android:layout_centerHorizontal="true"
                 android:fontFamily="sans-serif"
-                android:text="Change Event Poster"
+                android:text="@string/change_event_poster"
                 android:textAllCaps="true"
                 android:textColor="@color/address"
                 android:textSize="14sp" />
@@ -63,11 +63,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Event Name"
+                        android:text="@string/event_name"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -88,7 +88,10 @@
                         android:fontFamily="sans-serif-light"
                         android:text=""
                         android:textColor="?android:textColorPrimary"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:autofillHints=""
+                        android:inputType="textShortMessage"
+                        tools:ignore="LabelFor" />
 
                 </LinearLayout>
 
@@ -101,7 +104,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Club Name"
+                        android:text="@string/club_name"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -125,7 +128,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Date"
+                        android:text="@string/date"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -134,7 +137,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:hint="Select a date"
+                        android:hint="@string/select_a_date"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp"
                         android:maxLines="4"/>
@@ -151,7 +154,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time"
+                        android:text="@string/time"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -160,7 +163,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:hint="Select Time"
+                        android:hint="@string/select_time"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
 
@@ -174,7 +177,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Venue"
+                        android:text="@string/venue"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -185,7 +188,10 @@
                         android:fontFamily="sans-serif-light"
                         android:text=""
                         android:textColor="?android:textColorPrimary"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:autofillHints="Enter venue details"
+                        android:inputType="textShortMessage"
+                        tools:ignore="LabelFor" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -197,7 +203,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Description"
+                        android:text="@string/description"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -208,13 +214,10 @@
                         android:fontFamily="sans-serif-light"
                         android:text=""
                         android:textColor="?android:textColorPrimary"
-                        android:textSize="18sp" />
-
-<!--                    <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"-->
-<!--                        android:layout_marginTop="15dp"-->
-<!--                        android:background="@color/grey" />-->
+                        android:textSize="18sp"
+                        android:autofillHints="@string/description"
+                        android:inputType="textLongMessage"
+                        tools:ignore="LabelFor" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -226,7 +229,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Organizer/s"
+                        android:text="@string/organizer_s"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -235,15 +238,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:hint="Enter line separated details"
+                        android:hint="@string/enter_line_separated_details"
                         android:textColor="?android:textColorPrimary"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:autofillHints="organizer"
+                        android:inputType="text" />
 
-<!--                    <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"-->
-<!--                        android:layout_marginTop="15dp"-->
-<!--                        android:background="@color/grey" />-->
 
                 </LinearLayout>
 
@@ -263,7 +263,7 @@
             android:background="@drawable/mybutton"
             android:padding="10dp"
             android:rotationY="2"
-            android:text="Create"
-            android:textColor="#ffffff" />
+            android:text="@string/create"
+            android:textColor="?android:textColorPrimary" />
     </LinearLayout>
 </ScrollView>

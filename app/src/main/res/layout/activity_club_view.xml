@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_dashboard_black_24dp"
-                android:contentDescription="club image"/>
+                android:contentDescription="@string/club_image"/>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -43,13 +43,12 @@
             android:background="@drawable/mybutton"
             android:padding="10dp"
             android:rotationY="2"
-            android:text="Create Event"
-            android:textColor="#ffffff" />
+            android:text="@string/create_event"
+            android:textColor="?android:textColorPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
@@ -63,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Branch"
+                        android:text="@string/branch"
                         android:layout_marginBottom="8dp"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
@@ -93,7 +92,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:layout_marginBottom="8dp"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
@@ -124,7 +123,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Core Members"
+                    android:text="@string/core_members"
 
                     android:textColor="@color/headings"
                     android:textSize="20sp" />

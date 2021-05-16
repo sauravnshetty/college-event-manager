@@ -1,23 +1,17 @@
 package com.example.eventmanager.ui.home;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 
 import com.example.eventmanager.R;
 import com.example.eventmanager.model.Event;
@@ -27,8 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.example.eventmanager.R.menu.search_menu;
+import java.util.Objects;
 
 public class EventListFragment extends Fragment {
 
@@ -37,7 +30,6 @@ public class EventListFragment extends Fragment {
     private List<Event> upcomingEvents;
     private List<Event> recentEvents;
 
-    private EventListViewModel mViewModel;
     private EventRecyclerViewAdapter eventViewAdapter;
 
     public EventListFragment() {
@@ -53,12 +45,12 @@ public class EventListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.event_list_fragment, container, false);
-        mViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
+        EventListViewModel mViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         final RecyclerView eventRecyclerView = root.findViewById(R.id.eventRecyclerView);
         Bundle args = getArguments();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
         Date presentDate = new Date();
 
         mViewModel.getEvents().observe(getViewLifecycleOwner(), eventRowItems -> {
@@ -72,6 +64,7 @@ public class EventListFragment extends Fragment {
                 try {
                     Date eDate = sdf.parse(dateTime);
 
+                    assert eDate != null;
                     if(eDate.after(presentDate))
                         upcomingEvents.add(event);
                     else
@@ -82,7 +75,7 @@ public class EventListFragment extends Fragment {
                 }
             }
 
-            switch (args.getInt(ARG_POS)) {
+            switch (Objects.requireNonNull(args).getInt(ARG_POS)) {
                 case 0:
                     //upcoming events
                     eventViewAdapter = new EventRecyclerViewAdapter(getActivity(), upcomingEvents);
@@ -106,7 +99,7 @@ public class EventListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
-        switch (args.getInt(ARG_POS)) {
+        switch (Objects.requireNonNull(args).getInt(ARG_POS)) {
             case 0:
                 //upcoming events
                 break;

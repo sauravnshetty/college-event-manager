@@ -22,13 +22,12 @@ import static com.example.eventmanager.R.menu.search_menu;
 
 public class ClubListFragment extends Fragment {
 
-    private ClubListViewModel clubListViewModel;
     private ClubListViewAdapter clubViewAdapter;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        clubListViewModel = new ViewModelProvider(this).get(ClubListViewModel.class);
+        ClubListViewModel clubListViewModel = new ViewModelProvider(this).get(ClubListViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_club_list, container, false);
         final RecyclerView clubRecyclerView = root.findViewById(R.id.club_recycler_view);

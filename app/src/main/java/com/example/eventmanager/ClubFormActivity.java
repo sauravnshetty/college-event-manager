@@ -1,9 +1,6 @@
 package com.example.eventmanager;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,25 +9,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
-import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.model.Club;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -90,6 +81,7 @@ public class ClubFormActivity extends AppCompatActivity {
             //This was a major bug ^_^ , every time clubId of the model class used to be null!!!
             newClub.setClubId(clubId);
 
+            assert clubId != null;
             mDatabaseReference.child(clubId).setValue(newClub);
             Toast.makeText(getApplicationContext(), "Club added, hopefully", Toast.LENGTH_SHORT).show();
             finish();
@@ -115,7 +107,7 @@ public class ClubFormActivity extends AppCompatActivity {
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             imageUri = data.getData();
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 Glide.with(getApplicationContext()).load(String.valueOf(imageUri)).centerCrop().into(clubImage);
@@ -129,24 +121,16 @@ public class ClubFormActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void showClubDetailsInUI(Club club) {
         clubNameEt.setText(club.getName());
         clubBranchEt.setText(club.getBranch());
         clubIntroEt.setText(club.getIntroText());
         submitBtn.setText("Save");
         StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("clubImages");
-        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(clubImage);
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Failed to get club image");
-            }
-        });
+        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(
+                uri -> Glide.with(getApplicationContext()).load(String.valueOf(uri)).centerCrop().into(clubImage))
+        .addOnFailureListener(e -> Log.d(TAG, "Failed to get club image"));
     }
 
 
@@ -158,30 +142,21 @@ public class ClubFormActivity extends AppCompatActivity {
             StorageReference  fileReference  = FirebaseStorage.getInstance().getReference().child("clubImages/"+fileName);
 
             UploadTask uploadTask = fileReference.putFile(imageUri);
-                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(getApplicationContext(), "Upload Successfully", Toast.LENGTH_SHORT).show();
-                            //progressDialog.show();
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.dismiss();
+                    uploadTask.addOnSuccessListener(taskSnapshot -> {
+                        Toast.makeText(getApplicationContext(), "Upload Successfully", Toast.LENGTH_SHORT).show();
+                        //progressDialog.show();
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.dismiss();
 
-                        }
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed Successfully", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "failed to upload");
-                        }
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(), "Failed Successfully", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "failed to upload");
                     })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.setMessage("Uploaded  " +(int)progress+"%");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setMessage("Uploaded  " +(int)progress+"%");
                     });
         }
         else

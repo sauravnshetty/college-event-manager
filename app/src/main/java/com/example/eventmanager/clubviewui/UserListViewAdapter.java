@@ -13,22 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
-import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.User;
-import com.example.eventmanager.ui.clubs.ClubListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapter.ViewHolder> implements Filterable {
 
-    private static final String TAG = "UserListViewAdapter";
-    private Context context;
     private List<User> userList;
     private List<User> userListFull;
 
     public UserListViewAdapter(Context context, List<User> userList) {
-        this.context = context;
         this.userList = userList;
         this.userListFull = new ArrayList<>(userList);
     }
@@ -57,7 +52,7 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
         return userList.get(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView userNameTv;
         public CheckBox selectedCb;
@@ -71,10 +66,7 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
 
         @Override
         public void onClick(View view) {
-            if(selectedCb.isChecked())
-                selectedCb.setChecked(false);
-            else
-                selectedCb.setChecked(true);
+            selectedCb.setChecked(!selectedCb.isChecked());
         }
     }
 

@@ -31,7 +31,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"/>
-        <activity android:name=".login" />
         <activity android:name=".NavigationActivity" />
 
         <receiver

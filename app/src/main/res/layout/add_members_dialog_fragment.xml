@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/dialog_search"
@@ -33,7 +34,8 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:text="Cancel" />
+                android:text="@string/cancel"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/addBtn"
@@ -41,7 +43,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginRight="3dp"
-                android:text="Add" />
+                android:text="@string/add"
+                tools:ignore="ButtonStyle"
+                android:layout_marginEnd="3dp" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

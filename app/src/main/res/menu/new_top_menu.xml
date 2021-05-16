@@ -4,11 +4,11 @@
     <item
         android:id="@+id/edit"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Edit" />
+        android:title="@string/edit" />
     <item
         android:id="@+id/add_members"
-        android:title="Add Members" />
+        android:title="@string/add_members" />
     <item
         android:id="@+id/delete"
-        android:title="Delete" />
+        android:title="@string/delete" />
 </menu>

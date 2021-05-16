@@ -12,20 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
-import com.example.eventmanager.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisteredListViewAdapter extends RecyclerView.Adapter<RegisteredListViewAdapter.ViewHolder> implements Filterable {
 
-    private static final String TAG = "UserListViewAdapter";
-    private Context context;
     private List<String> userList;
     private List<String> userListFull;
 
     public RegisteredListViewAdapter(Context context, List<String> userList) {
-        this.context = context;
         this.userList = userList;
         this.userListFull = new ArrayList<>(userList);
     }
@@ -39,7 +35,7 @@ public class RegisteredListViewAdapter extends RecyclerView.Adapter<RegisteredLi
     @Override
     public RegisteredListViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.registered_row_item, parent, false);
-        return new RegisteredListViewAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -53,7 +49,7 @@ public class RegisteredListViewAdapter extends RecyclerView.Adapter<RegisteredLi
         return userList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView userEmailTv;
         public ViewHolder(@NonNull View itemView) {

@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class AddMembersDialogViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     private MutableLiveData<List<User>> users;
-    private ArrayList<User> usersArrayList = new ArrayList<>();
+    private  ArrayList<User> usersArrayList = new ArrayList<>();
 
 
     public LiveData<List<User>> getUsers() {
@@ -35,8 +36,9 @@ public class AddMembersDialogViewModel extends ViewModel {
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {
                 User user = dataSnapshot.getValue(User.class);
+                assert user != null;
                 user.setUid(dataSnapshot.getKey());
                 usersArrayList.add(user);
                 //since this function gets called later we need to update the livedata here
@@ -44,8 +46,9 @@ public class AddMembersDialogViewModel extends ViewModel {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildChanged(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {
                 User user = dataSnapshot.getValue(User.class);
+                assert user != null;
                 user.setUid(dataSnapshot.getKey());
 
                 for(int i = 0; i < usersArrayList.size(); i++) {
@@ -58,15 +61,15 @@ public class AddMembersDialogViewModel extends ViewModel {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            public void onChildRemoved(@NotNull DataSnapshot dataSnapshot) {
                 //Not needed currently as user can't be deleted
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            public void onChildMoved(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NotNull DatabaseError databaseError) {}
         });
 
     }

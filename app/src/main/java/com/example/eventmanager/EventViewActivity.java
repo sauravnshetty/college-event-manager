@@ -1,20 +1,12 @@
 package com.example.eventmanager;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
-
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,14 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import com.bumptech.glide.Glide;
-import com.example.eventmanager.clubviewui.AddMembersDialogFragment;
 import com.example.eventmanager.eventviewui.RegisteredMembersDialogFragment;
-import com.example.eventmanager.model.Club;
 import com.example.eventmanager.model.Event;
-import com.example.eventmanager.model.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +48,6 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
     private TextView eventNameTv,clubNameTv,eventDateTv,eventTimeTv,eventVenueTv,eventDescriptionTv,eventOrganizerTv;
     private Button registerBtn,registerListBtn;
 
-    private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private DatabaseReference mDatabase;
     private Event editableEvent;
@@ -96,6 +87,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -114,38 +106,28 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         //Setting message manually and performing action on button click
         builder.setMessage("Are you sure want to delete?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
-                        eventImagesRef.child(eventId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getApplicationContext(),"deleted successfully",Toast.LENGTH_SHORT).show();
-                                //deleted
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //some error occurred
-                            }
-                        });
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
+                    eventImagesRef.child(eventId).delete().addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getApplicationContext(),"deleted successfully",Toast.LENGTH_SHORT).show();
+                        //deleted
+                    }).addOnFailureListener(e -> {
+                        //some error occurred
+                    });
 
-                        mDatabase.child("events").child(eventId).removeValue();
-                        mDatabase.child("registeredmembers").child(eventId).removeValue();
-                        Intent intent=new Intent(getApplicationContext(),NavigationActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
-                                Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                    mDatabase.child("events").child(eventId).removeValue();
+                    mDatabase.child("registeredmembers").child(eventId).removeValue();
+                    Intent intent=new Intent(getApplicationContext(),NavigationActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                        Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                .setNegativeButton("No", (dialog, id) -> {
+                    //  Action for 'NO' Button
+                    dialog.cancel();
+                    Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
+                            Toast.LENGTH_SHORT).show();
                 });
         //Creating dialog box
         AlertDialog alert = builder.create();
@@ -171,7 +153,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         //initialising alert dialog builder
         builder = new AlertDialog.Builder(this);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -190,12 +172,9 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         registerListBtn = findViewById(R.id.registerListBtn);
         registerListBtn.setEnabled(false);
         registerListBtn.setVisibility(View.GONE);
-        registerListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment dialog = new RegisteredMembersDialogFragment(eventId);
-                dialog.show(getSupportFragmentManager(), "RegisteredMembersDialogFragment");
-            }
+        registerListBtn.setOnClickListener(v -> {
+            DialogFragment dialog = new RegisteredMembersDialogFragment(eventId);
+            dialog.show(getSupportFragmentManager(), "RegisteredMembersDialogFragment");
         });
     }
 
@@ -225,6 +204,7 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Event event = snapshot.getValue(Event.class);
+                assert event != null;
                 event.setEventId(snapshot.getKey());
                 editableEvent = event;
                 eventNameTv.setText(event.getEventName());
@@ -244,18 +224,8 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
 
         StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
 
-        eventImagesRef.child(eventId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(String.valueOf(uri)).fitCenter().into(eventImage);
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Failed to get event image");
-            }
-        });
+        eventImagesRef.child(eventId).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(String.valueOf(uri)).fitCenter().into(eventImage))
+        .addOnFailureListener(e -> Log.d(TAG, "Failed to get event image"));
     }
 
     @Override
@@ -289,13 +259,14 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
         //intent.setAction("EVENT_REMINDER");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) System.currentTimeMillis(), intent,0);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
         String dateTime = eventDateTv.getText().toString().trim() + " " + eventTimeTv.getText().toString().trim();
         //dateTime = "15-05-2021 12:04 am";
         Log.d(TAG, dateTime);
         try {
             Date date = sdf.parse(dateTime);
             Calendar calendar = Calendar.getInstance();
+            assert date != null;
             calendar.setTime(date);
             calendar.add(Calendar.HOUR, -1);
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="85dp"
     android:layout_marginBottom="1dp"
@@ -50,7 +49,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginTop="16dp"
-            android:text="Ace"
+            android:text=""
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/club_image"
@@ -63,7 +62,7 @@
             android:maxEms="10"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Computer science"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/club_image"

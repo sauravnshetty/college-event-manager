@@ -2,7 +2,6 @@ package com.example.eventmanager.ui.clubs;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,23 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmanager.ClubViewActivity;
-import com.example.eventmanager.model.Club;
-import com.example.eventmanager.model.ClubRowItem;
 import com.example.eventmanager.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.eventmanager.model.Club;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "ClubListViewAdapter";
-    private Context context;
+    private final Context context;
     private List<Club> clubList;
     private List<Club> clubListFull;
 
@@ -58,18 +52,8 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
         holder.clubDept.setText(club.getBranch());
 
         StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("clubImages");
-        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.clubImage);
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Failed to get club image");
-            }
-        });
+        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.clubImage))
+        .addOnFailureListener(e -> Log.d(TAG, "Failed to get club image"));
     }
 
     @Override

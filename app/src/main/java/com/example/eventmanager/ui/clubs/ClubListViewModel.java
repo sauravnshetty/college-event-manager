@@ -1,25 +1,15 @@
 package com.example.eventmanager.ui.clubs;
 
-import android.net.Uri;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.bumptech.glide.Glide;
 import com.example.eventmanager.model.Club;
-import com.example.eventmanager.model.ClubRowItem;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,8 +36,9 @@ public class ClubListViewModel extends ViewModel {
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {
                 Club club = dataSnapshot.getValue(Club.class);
+                assert club != null;
                 club.setClubId(dataSnapshot.getKey());
                 clubsArrayList.add(club);
                 //since this function gets called later we need to update the livedata here
@@ -55,7 +46,7 @@ public class ClubListViewModel extends ViewModel {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildChanged(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {
                 Club club = dataSnapshot.getValue(Club.class);
                 club.setClubId(dataSnapshot.getKey());
 
@@ -69,7 +60,7 @@ public class ClubListViewModel extends ViewModel {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            public void onChildRemoved(@NotNull DataSnapshot dataSnapshot) {
                 Club club = dataSnapshot.getValue(Club.class);
                 club.setClubId(dataSnapshot.getKey());
 
@@ -83,10 +74,10 @@ public class ClubListViewModel extends ViewModel {
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            public void onChildMoved(@NotNull DataSnapshot dataSnapshot, String prevChildKey) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NotNull DatabaseError databaseError) {}
         });
     }
 
