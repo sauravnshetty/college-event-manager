@@ -28,7 +28,7 @@
             android:layout_marginBottom="10dp"
             android:layout_height="30dp"
             android:textAlignment="center"
-            android:text="CODE_INIT"
+            android:text=""
             android:fontFamily="sans-serif-light"
             android:textColor="?android:textColorPrimary"
             android:textSize="25sp"
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="ACE"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="10-10-2020"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="02 : 30"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -146,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Sadananda Auditorium"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -175,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="This is a event created under ACE"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -203,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Shashank +9112345678\nSaurav N Shetty +91232342353"
+                    android:text=""
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -233,18 +233,13 @@
 
         <Button
             android:id="@+id/registerListBtn"
-            android:layout_width="159dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="126dp"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="126dp"
-            android:layout_marginEnd="126dp"
-            android:layout_marginRight="126dp"
-            android:layout_marginBottom="25dp"
-            android:background="@drawable/mybutton"
+            android:background="@color/black"
             android:padding="10dp"
             android:rotationY="2"
             android:text="View Registered Members"
-            android:textColor="?android:textColorPrimary" />
+            android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>
