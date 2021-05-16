@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -55,7 +56,7 @@ public class EventFormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String eventClubName = intent.getStringExtra("clubName");
         clubId = intent.getStringExtra("clubId");
-        editableEvent = (Event) intent.getSerializableExtra("eventObject");
+
 
 
         eventClubNameTv = findViewById(R.id.clubNameEt);
@@ -121,13 +122,16 @@ public class EventFormActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            editableEvent = (Event) intent.getSerializableExtra("eventObject");
 
             if(editableEvent != null){
+                showEventDetailsInUi();
                 eventId = editableEvent.getEventId();
             }
             else {
                 eventId= mDatabaseReference.push().getKey();
             }
+
             uploadFile(eventId);
             //event constructor
             Event newEvent = new Event(eventNameEt.getText().toString(),
@@ -141,9 +145,22 @@ public class EventFormActivity extends AppCompatActivity {
             newEvent.setEventId(eventId);
             assert eventId != null;
             mDatabaseReference.child(eventId).setValue(newEvent);
-            Toast.makeText(getApplicationContext(), "Event added, hopefully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Event added, successfully", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    private void showEventDetailsInUi() {
+        eventNameEt.setText(editableEvent.getEventName());
+        eventDateTv.setText(editableEvent.getEventDate());
+        eventTimeTv.setText(editableEvent.getEventTime());
+        eventVenueEt.setText(editableEvent.getEventVenue());
+        eventDescriptionEt.setText(editableEvent.getEventDescription());
+        eventOrganizerEt.setText(editableEvent.getEventOrganizers());
+
+        StorageReference fileReference  = FirebaseStorage.getInstance().getReference().child("eventImages");
+        fileReference.child(editableEvent.getEventId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(eventImage))
+                .addOnFailureListener(e -> Log.d(TAG, "Failed to get event image"));
     }
 
     private boolean isAllFilled() {
@@ -164,24 +181,6 @@ public class EventFormActivity extends AppCompatActivity {
         return filled;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(editableEvent!=null){
-            eventNameEt.setText(editableEvent.getEventName());
-            eventDateTv.setText(editableEvent.getEventDate());
-            eventTimeTv.setText(editableEvent.getEventTime());
-            eventVenueEt.setText(editableEvent.getEventVenue());
-            eventDescriptionEt.setText(editableEvent.getEventDescription());
-            eventOrganizerEt.setText(editableEvent.getEventOrganizers());
-
-            StorageReference fileReference  = FirebaseStorage.getInstance().getReference().child("eventImages");
-
-            fileReference.child(editableEvent.getEventId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(eventImage))
-                    .addOnFailureListener(e -> Log.d(TAG, "Failed to get event image"));
-        }
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -189,10 +188,11 @@ public class EventFormActivity extends AppCompatActivity {
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             imageUri = data.getData();
+            Bitmap bitmap=null;
             try {
-                MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 Glide.with(getApplicationContext()).load(String.valueOf(imageUri)).centerCrop().into(eventImage);
-                //eventImage.setImageBitmap(bitmap);
+                eventImage.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -202,38 +202,6 @@ public class EventFormActivity extends AppCompatActivity {
         }
     }
 
-    /*private void performCrop(String picUri) {
-        try {
-            //Start Crop Activity
-
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            File f = new File(picUri);
-            Uri contentUri = Uri.fromFile(f);
-
-            cropIntent.setDataAndType(contentUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 280);
-            cropIntent.putExtra("outputY", 280);
-
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, RESULT_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }*/
 
     private void uploadFile(String fileName) {
         final ProgressDialog progressDialog = new ProgressDialog(getBaseContext());
@@ -244,14 +212,13 @@ public class EventFormActivity extends AppCompatActivity {
 
             UploadTask uploadTask = fileReference.putFile(imageUri);
             uploadTask.addOnSuccessListener(taskSnapshot -> {
-                Toast.makeText(getApplicationContext(), "Upload Successfully", Toast.LENGTH_SHORT).show();
                 //progressDialog.show();
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.dismiss();
 
             })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(getApplicationContext(), "Failed Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "uploading image failed", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "failed to upload");
                     })
                     .addOnProgressListener(taskSnapshot -> {
@@ -260,8 +227,9 @@ public class EventFormActivity extends AppCompatActivity {
                         progressDialog.setMessage("Uploaded  " +(int)progress+"%");
                     });
         }
-        else
-            Toast.makeText(this, "Please Select a Image", Toast.LENGTH_SHORT).show();
+        else {
+            //Toast.makeText(this, "Please Select a Image", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
