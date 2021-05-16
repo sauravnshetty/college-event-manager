@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -41,7 +43,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void createNotification(Context context, String title, String message){
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, EVENT_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.ic_launcher_round).setColor(context.getResources().getColor(R.color.purple_200))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon_round))
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
