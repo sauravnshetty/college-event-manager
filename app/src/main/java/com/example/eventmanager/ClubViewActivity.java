@@ -38,16 +38,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ClubViewActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
+ public class ClubViewActivity extends AppCompatActivity {
 
     private final String TAG = "ClubViewActivity";
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
 
-    private TextView clubNameTv, clubBranchTv, clubIntroTv;
+    private TextView clubNameTv, clubBranchTv, clubIntroTv, clubMemebersTv;
     private ImageView clubImage;
-    private Button addMembersBtn;
     private Button createEventBtn;
 
     private String clubId;
@@ -71,15 +76,7 @@ public class ClubViewActivity extends AppCompatActivity {
         clubBranchTv = findViewById(R.id.clubBranch);
         clubIntroTv = findViewById(R.id.clubIntro);
         clubImage = findViewById(R.id.clubImage);
-
-        addMembersBtn = findViewById(R.id.addMembersBtn);
-
-        addMembersBtn.setEnabled(false);
-        addMembersBtn.setVisibility(View.GONE);
-        addMembersBtn.setOnClickListener(view -> {
-            DialogFragment dialog = new AddMembersDialogFragment(clubId);
-            dialog.show(getSupportFragmentManager(), "AddMembersDialogFragment");
-        });
+        clubMemebersTv = findViewById(R.id.clubMembersListTv);
 
         createEventBtn = findViewById(R.id.createEventBtn);
         createEventBtn.setEnabled(false);
@@ -116,6 +113,33 @@ public class ClubViewActivity extends AppCompatActivity {
             }
         });
 
+        mDatabase.child("clubmembers").child(clubId).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String text = clubMemebersTv.getText().toString();
+                List<String> memberList = new ArrayList<>(Arrays.asList(text.split("\\s*\\n\\s*")));
+                if(!memberList.contains(snapshot.getValue().toString().trim()))
+                    text +=  "\n" + snapshot.getValue() + "\n";
+                clubMemebersTv.setText(text);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
         DatabaseReference clubsRef = mDatabase.child("clubs");
         clubsRef.child(clubId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -134,7 +158,6 @@ public class ClubViewActivity extends AppCompatActivity {
         });
 
         StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("clubImages");
-
         clubImagesRef.child(clubId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -147,6 +170,7 @@ public class ClubViewActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to get club image");
             }
         });
+
     }
 
     @Override
@@ -274,22 +298,18 @@ public class ClubViewActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }

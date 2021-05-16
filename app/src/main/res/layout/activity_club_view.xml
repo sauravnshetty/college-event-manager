@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <com.google.android.material.card.MaterialCardView
@@ -36,11 +37,7 @@
             android:id="@+id/createEventBtn"
             android:layout_width="159dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="126dp"
-            android:layout_marginLeft="126dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="126dp"
-            android:layout_marginRight="126dp"
             android:layout_marginBottom="25dp"
             android:background="@drawable/mybutton"
             android:padding="10dp"
@@ -66,6 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Branch"
+                        android:layout_marginBottom="8dp"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
 
@@ -95,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description"
+                    android:layout_marginBottom="8dp"
                     android:textColor="@color/headings"
                     android:textSize="13sp" />
 
@@ -114,23 +113,40 @@
                     android:background="@color/grey" />
 
             </LinearLayout>
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/addMembersBtn"
-            android:layout_width="159dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="126dp"
-            android:layout_marginLeft="126dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="126dp"
-            android:layout_marginRight="126dp"
-            android:layout_marginBottom="25dp"
-            android:background="@drawable/mybutton"
-            android:padding="10dp"
-            android:rotationY="2"
-            android:text="Add members"
-            android:textColor="?android:textColorPrimary" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Core Members"
+
+                    android:textColor="@color/headings"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/clubMembersListTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text=""
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
