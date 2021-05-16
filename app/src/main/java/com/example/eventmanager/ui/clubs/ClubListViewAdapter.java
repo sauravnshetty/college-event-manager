@@ -52,8 +52,12 @@ public class ClubListViewAdapter extends RecyclerView.Adapter<ClubListViewAdapte
         holder.clubDept.setText(club.getBranch());
 
         StorageReference clubImagesRef = FirebaseStorage.getInstance().getReference().child("clubImages");
-        clubImagesRef.child(club.getClubId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.clubImage))
-        .addOnFailureListener(e -> Log.d(TAG, "Failed to get club image"));
+        clubImagesRef.child(club.getClubId()).getDownloadUrl()
+                .addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.clubImage))
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Failed to get club image");
+                    Glide.with(context).load(R.drawable.ic_app_icon_round).into(holder.clubImage);
+                });
     }
 
     @Override

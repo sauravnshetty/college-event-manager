@@ -83,8 +83,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.date.setText(event.getEventDate());
 
         StorageReference eventImagesRef = FirebaseStorage.getInstance().getReference().child("eventImages");
-        eventImagesRef.child(event.getEventId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.eventImage))
-                .addOnFailureListener(e -> Log.d(TAG, "Failed to get event image"));
+        eventImagesRef.child(event.getEventId()).getDownloadUrl()
+                .addOnSuccessListener(uri -> Glide.with(context).load(String.valueOf(uri)).centerCrop().into(holder.eventImage))
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Failed to get event image");
+                    Glide.with(context).load(R.drawable.ic_app_icon_round).into(holder.eventImage);
+                });
     }
 
     @Override
