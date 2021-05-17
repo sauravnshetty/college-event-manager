@@ -44,7 +44,6 @@ public class EventFormActivity extends AppCompatActivity {
     private Uri imageUri;
     private int eventHour,eventMin;
     private String clubId;
-    private Event editableEvent;
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
@@ -56,7 +55,6 @@ public class EventFormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String eventClubName = intent.getStringExtra("clubName");
         clubId = intent.getStringExtra("clubId");
-
 
 
         eventClubNameTv = findViewById(R.id.clubNameEt);
@@ -71,6 +69,11 @@ public class EventFormActivity extends AppCompatActivity {
         submitBtn = findViewById(R.id.eventRegisterBtn);
         changeDpTv = findViewById(R.id.changeEventImage);
         eventImage = findViewById(R.id.eventImage);
+
+        Event editableEvent = (Event) intent.getSerializableExtra("eventObject");
+
+        if(editableEvent != null)
+            showEventDetailsInUi(editableEvent);
 
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -116,21 +119,18 @@ public class EventFormActivity extends AppCompatActivity {
 
         submitBtn.setOnClickListener(view -> {
             DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
+
             String eventId;
 
             if(!isAllFilled()) {
                 Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            editableEvent = (Event) intent.getSerializableExtra("eventObject");
 
-            if(editableEvent != null){
-                showEventDetailsInUi();
-                eventId = editableEvent.getEventId();
-            }
-            else {
-                eventId= mDatabaseReference.push().getKey();
-            }
+            if(editableEvent == null)
+                eventId =mDatabaseReference.push().getKey();
+            else
+                eventId= editableEvent.getEventId();
 
             uploadFile(eventId);
             //event constructor
@@ -150,13 +150,14 @@ public class EventFormActivity extends AppCompatActivity {
         });
     }
 
-    private void showEventDetailsInUi() {
+    private void showEventDetailsInUi(Event editableEvent) {
         eventNameEt.setText(editableEvent.getEventName());
         eventDateTv.setText(editableEvent.getEventDate());
         eventTimeTv.setText(editableEvent.getEventTime());
         eventVenueEt.setText(editableEvent.getEventVenue());
         eventDescriptionEt.setText(editableEvent.getEventDescription());
         eventOrganizerEt.setText(editableEvent.getEventOrganizers());
+        submitBtn.setText("save");
 
         StorageReference fileReference  = FirebaseStorage.getInstance().getReference().child("eventImages");
         fileReference.child(editableEvent.getEventId()).getDownloadUrl().addOnSuccessListener(uri -> Glide.with(getApplicationContext()).load(String.valueOf(uri)).into(eventImage))
