@@ -126,8 +126,6 @@ public class EventViewActivity extends AppCompatActivity implements View.OnClick
                 .setNegativeButton("No", (dialog, id) -> {
                     //  Action for 'NO' Button
                     dialog.cancel();
-                    Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
-                            Toast.LENGTH_SHORT).show();
                 });
         //Creating dialog box
         AlertDialog alert = builder.create();
